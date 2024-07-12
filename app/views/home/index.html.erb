@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MyApp</title>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">MyApp</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="<%= root_path %>">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%= about_path %>">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%= services_path %>">Services</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%= contacts_path %>">Contacts</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<header class="bg-primary text-white text-center py-5">
+  <div class="container">
+    <h1>Welcome to MyApp</h1>
+    <p class="lead">Your one-stop solution for all your needs</p>
+    <a href="<%= services_path %>" class="btn btn-lg btn-light mt-3">Our Services</a>
+  </div>
+</header>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <h2>About Us</h2>
+        <p>Learn more about what we do and our mission.</p>
+        <a href="<%= about_path %>" class="btn btn-primary">Learn More</a>
+      </div>
+      <div class="col-lg-4">
+        <h2>Services</h2>
+        <p>Discover the wide range of services we offer to our clients.</p>
+        <a href="<%= services_path %>" class="btn btn-primary">Our Services</a>
+      </div>
+      <div class="col-lg-4">
+        <h2>Contact Us</h2>
+        <p>Get in touch with us for any inquiries or support.</p>
+        <a href="<%= contacts_path %>" class="btn btn-primary">Contact</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-light text-center py-4">
+  <div class="container">
+    <p class="mb-0">&copy; 2024 MyApp. All rights reserved.</p>
+  </div>
+</footer>
+</body>
+</html>

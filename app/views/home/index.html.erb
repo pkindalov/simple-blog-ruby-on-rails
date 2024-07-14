@@ -40,23 +40,67 @@
 
 <section class="py-5">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-4">
-        <h2>About Us</h2>
-        <p>Learn more about what we do and our mission.</p>
-        <a href="<%= about_path %>" class="btn btn-primary">Learn More</a>
+    <% if current_user %>
+      <h2>Recent Posts</h2>
+      <div class="row">
+        <% @posts.each do |post| %>
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <% if post.photo.nil? %>
+                <%= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default image' %>
+              <% else %>
+                <img src="<%= post.photo %>" alt="" />
+              <% end %>
+<!--              <img alt="" src="<%#= post.photo %>"> if post.photo.present?-->
+
+              <%#= post.photo.nil? ? '' : image_tag(post.photo) %>
+
+              <!--              <img alt="" src="<%#= post.photo %>"> if post.photo.nil? == false-->
+<!--              <%#= image_tag url_for(post.photo), class: 'card-img-top' %> if post.photo.nil? == false-->
+              <%# if post.photo.nil? %>
+                <%#= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default image' %>
+            <%# else %>
+                <%#= image_tag post.photo %>
+                <%#= image_tag url_for(post.photo), class: 'card-img-top' %>
+            <%# end %>
+
+              <%# if post.photo.present? && post.photo.attached? %>
+                <%#= image_tag url_for(post.photo), class: 'card-img-top' %>
+              <%# else %>
+                <%#= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default image' %>
+              <%# end %>
+              <div class="card-body">
+                <h4 class="card-title"><%= post.title %></h4>
+                <p class="card-text"><%= post.description %></p>
+                <p class="card-text"><small class="text-muted"><%= post.post_date %></small></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+
+
+
       </div>
-      <div class="col-lg-4">
-        <h2>Services</h2>
-        <p>Discover the wide range of services we offer to our clients.</p>
-        <a href="<%= services_path %>" class="btn btn-primary">Our Services</a>
+    <% else %>
+      <div class="row">
+        <div class="col-lg-4">
+          <h2>About Us</h2>
+          <p>Learn more about what we do and our mission.</p>
+          <a href="<%= about_path %>" class="btn btn-primary">Learn More</a>
+        </div>
+        <div class="col-lg-4">
+          <h2>Services</h2>
+          <p>Discover the wide range of services we offer to our clients.</p>
+          <a href="<%= services_path %>" class="btn btn-primary">Our Services</a>
+        </div>
+        <div class="col-lg-4">
+          <h2>Contact Us</h2>
+          <p>Get in touch with us for any inquiries or support.</p>
+          <a href="<%= contacts_path %>" class="btn btn-primary">Contact</a>
+        </div>
       </div>
-      <div class="col-lg-4">
-        <h2>Contact Us</h2>
-        <p>Get in touch with us for any inquiries or support.</p>
-        <a href="<%= contacts_path %>" class="btn btn-primary">Contact</a>
-      </div>
-    </div>
+    <% end %>
   </div>
 </section>
 

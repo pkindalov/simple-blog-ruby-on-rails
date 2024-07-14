@@ -1,0 +1,40 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <div class="card-header">
+          <h4>Edit Post</h4>
+        </div>
+        <div class="card-body">
+          <%= form_with(model: @post, url: post_path(@post), method: :patch, local: true) do |form| %>
+            <%#= form.error_messages %>
+
+            <div class="form-group">
+              <%= form.label :title %>
+              <%= form.text_field :title, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :description %>
+              <%= form.text_area :description, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :date %>
+              <%= form.date_field :date, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :photo %>
+              <%= form.file_field :photo, class: 'form-control' %>
+            </div>
+
+            <div class="actions">
+              <%= form.submit 'Update Post', class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

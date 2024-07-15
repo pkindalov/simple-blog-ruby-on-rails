@@ -2,16 +2,21 @@
   <div class="row">
     <div class="col-md-4">
       <div class="card">
-        <!--        <img src="..." class="card-img-top" alt="User Avatar">-->
-        <div class="card-body">
-          <!--          <h5 class="card-title"><%#= @user.username %></h5>-->
+        <div class="card-body text-center">
+          <!-- Показване на аватара, ако има -->
+          <% if @user.avatar.attached? %>
+            <%= image_tag url_for(@user.avatar), class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
+          <% else %>
+            <%= image_tag 'default_image.png', class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
+          <% end %>
+
           <h5 class="card-title">User profile</h5>
           <p class="card-text"><%= @user.email %></p>
           <!-- Други данни за профила -->
         </div>
         <div class="card-footer">
           <%= link_to 'Edit Profile', edit_user_registration_path, class: 'btn btn-primary btn-block mb-3' %>
-          <%#= link_to 'View My Posts', user_posts_path(@user), class: 'btn btn-outline-secondary btn-block' %>
+          <!-- link_to 'View My Posts', user_posts_path(@user), class: 'btn btn-outline-secondary btn-block' %>-->
         </div>
       </div>
     </div>
@@ -30,10 +35,14 @@
               <% end %>
               <!-- Други полета от поста -->
             </div>
-            <div class="btn-group" role="group" aria-label="Post Actions">
-              <%= link_to 'Редактирай', edit_post_path(post), class: 'btn btn-primary' %>
-              <%= link_to 'Изтрий', post, method: :delete, data: { confirm: 'Сигурни ли сте?' }, class: 'btn btn-danger' %>
-            </div>
+
+            <% if post.user_id == current_user.id %>
+              <div class="btn-group" role="group" aria-label="Post Actions">
+                <%= link_to 'Редактирай', edit_post_path(post), class: 'btn btn-primary' %>
+                <%= link_to 'Изтрий', post, method: :delete, data: { confirm: 'Сигурни ли сте?' }, class: 'btn btn-danger' %>
+              </div>
+            <% end %>
+
           </div>
         <% end %>
 

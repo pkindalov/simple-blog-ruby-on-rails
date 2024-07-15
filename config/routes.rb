@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   get 'contacts', to: 'home#contacts'
   # get 'users/:id/profile', to: 'users#profile', as: 'user_profile'
   # get 'users/:id/settings', to: 'users#settings', as: 'user_settings'
+  get 'users/:id/profile', to: 'users#profile', as: 'user_profile'
+
+
   devise_for :users
   resources :users, only: [:show]
   resources :posts, only: [:new, :create, :edit, :update, :destroy]

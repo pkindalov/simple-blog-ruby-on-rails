@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   end
 
   def profile
-    # Профилна страница, може да добавиш съдържание тук
+   @posts = @user.posts.paginate(:page => params[:page], :per_page => 5)
   end
 
   def settings

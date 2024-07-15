@@ -46,29 +46,12 @@
         <% @posts.each do |post| %>
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <% if post.photo.nil? %>
-                <%= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default image' %>
+              <% if post && post.photo.attached? %>
+                <%= image_tag url_for(post.photo), class: 'card-img-top', alt: 'Post Image' %>
               <% else %>
-                <img src="<%= post.photo %>" alt=""/>
+                <!-- Покажи някаква дефоултна снимка или нищо, според вашия дизайн -->
+                <%= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default Image' %>
               <% end %>
-              <!--              <img alt="" src="<%#= post.photo %>"> if post.photo.present?-->
-
-              <%#= post.photo.nil? ? '' : image_tag(post.photo) %>
-
-              <!--              <img alt="" src="<%#= post.photo %>"> if post.photo.nil? == false-->
-              <!--              <%#= image_tag url_for(post.photo), class: 'card-img-top' %> if post.photo.nil? == false-->
-              <%# if post.photo.nil? %>
-              <%#= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default image' %>
-              <%# else %>
-              <%#= image_tag post.photo %>
-              <%#= image_tag url_for(post.photo), class: 'card-img-top' %>
-              <%# end %>
-
-              <%# if post.photo.present? && post.photo.attached? %>
-              <%#= image_tag url_for(post.photo), class: 'card-img-top' %>
-              <%# else %>
-              <%#= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default image' %>
-              <%# end %>
               <div class="card-body">
                 <h4 class="card-title"><%= post.title %></h4>
                 <p class="card-text"><%= post.description %></p>
@@ -85,11 +68,6 @@
         <%= will_paginate @posts, renderer: BootstrapPagination::Rails %>
       </div>
 
-      <!--      <div class="pagination">-->
-      <%#= will_paginate @posts, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
-      <%#= will_paginate @posts %>
-      <!--      </div>-->
-      <%#= will_paginate @posts %>
     <% else %>
       <div class="row">
         <div class="col-lg-4">

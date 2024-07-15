@@ -6,7 +6,9 @@
           <h4>Edit Post</h4>
         </div>
         <div class="card-body">
-          <%= form_with(model: @post, url: post_path(@post), method: :patch, local: true) do |form| %>
+          <%#= form_with(model: @post, url: post_path(@post), method: :patch, local: true) do |form| %>
+            <%= form_with model: @post, url: posts_path, method: :post, multipart: true do |form| %>
+
             <%#= form.error_messages %>
 
             <div class="form-group">
@@ -28,6 +30,11 @@
               <%= form.label :photo %>
               <%= form.file_field :photo, class: 'form-control' %>
             </div>
+
+<!--            <div class="form-group">-->
+              <%#= form.label :photos %>
+              <%#= form.file_field :photos, class: 'form-control', multiple: true %>
+<!--            </div>-->
 
             <div class="actions">
               <%= form.submit 'Update Post', class: 'btn btn-primary' %>

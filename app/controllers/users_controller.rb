@@ -16,12 +16,12 @@ class UsersController < ApplicationController
   end
 
   # def update
-    # respond_to do |format|
-    #   if @user.update(user_params)
-    #     format.html { redirect_to @user, notice: 'User was successfully updated.' }
-    #     format.json { render :show, status: :ok, location: @user }
-    #   end
-    # end
+  # respond_to do |format|
+  #   if @user.update(user_params)
+  #     format.html { redirect_to @user, notice: 'User was successfully updated.' }
+  #     format.json { render :show, status: :ok, location: @user }
+  #   end
+  # end
   # end
 
   def update
@@ -36,11 +36,14 @@ class UsersController < ApplicationController
     end
   end
 
-
   private
 
   def set_user
     @user = User.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    # redirect_to controller: 'home', action: 'index'
+    redirect_to root_path, alert: 'User not found.'
+    # return
   end
 
   def user_params

@@ -7,7 +7,8 @@
         </div>
         <div class="card-body">
           <%#= form_with(model: @post, url: post_path(@post), method: :patch, local: true) do |form| %>
-            <%= form_with model: @post, url: posts_path, method: :post, multipart: true do |form| %>
+          <%= form_with(model: @post, url: post_path(@post), method: :patch, multipart: true) do |form| %>
+            <%= form.hidden_field :_method, value: 'patch' %>
 
             <%#= form.error_messages %>
 

@@ -43,7 +43,12 @@
     <% if current_user %>
       <h2>Recent Posts</h2>
       <div class="row">
+        <%#= current_user.id %>
         <% @posts.each do |post| %>
+
+          <%#= post.inspect %>
+          <%#= debug post %>
+
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
               <% if post && post.photo.attached? %>
@@ -57,6 +62,10 @@
                 <p class="card-text"><%= post.description %></p>
                 <p><%= post.created_at.strftime("%d %B %Y") %></p>
                 <p class="card-text"><small class="text-muted"><%= post.post_date %></small></p>
+                <% if post.user_id == current_user.id %>
+                  <%= link_to 'Редактирай', edit_post_path(post), class: 'btn btn-primary' %>
+                  <%= link_to 'Изтрий', post, method: :delete, data: { confirm: 'Сигурни ли сте?' }, class: 'btn btn-danger' %>
+                <% end %>
               </div>
             </div>
           </div>

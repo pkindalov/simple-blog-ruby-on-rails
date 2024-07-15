@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # get 'users/:id/settings', to: 'users#settings', as: 'user_settings'
   devise_for :users
   resources :users, only: [:show]
-  resources :posts, only: [:new, :create, :edit, :update]
+  resources :posts, only: [:new, :create, :edit, :update, :destroy]
   # или
   # get 'users/:id', to: 'users#show', as: :user_profile
 end

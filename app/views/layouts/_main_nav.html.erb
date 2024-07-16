@@ -25,10 +25,10 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <% if user_signed_in? %>
           <li class="nav-item">
-<!--            <a href="#" class="nav-link"><%#= current_user.email %></a>-->
-            <%#= link_to current_user.email, user_path(current_user), class: "nav-link" %>
-<!--            <a href="/users/edit" class="nav-link"><%#= current_user.email %></a>-->
-            <%= link_to current_user.email, user_profile_path(current_user), class: "nav-link" %>
+            <%= link_to user_profile_path(current_user), class: "nav-link" do %>
+              <%= image_tag(current_user.profile_photo, class: "rounded-circle", size: "30x30", alt: "Profile Photo") %>
+              <%= current_user.email %>
+            <% end %>
           </li>
           <li class="nav-item">
             <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: "nav-link" %>

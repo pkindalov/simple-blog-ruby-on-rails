@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card-body text-center">
           <!-- Показване на аватара, ако има -->
-          <% if @user.avatar.attached? %>
+          <% if @user.avatar.respond_to?('attached') && @user.avatar.attached? %>
             <%= image_tag url_for(@user.avatar), class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
           <% else %>
             <%= image_tag 'default_image.png', class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
@@ -30,8 +30,11 @@
               <h5 class="card-title"><%= post.title %></h5>
               <p class="card-text"><%= post.description %></p>
               <!-- Показване на снимките, ако има -->
-              <% if post.photo.attached? %>
+              <% if post.photo.respond_to?('attached') &&  post.photo.attached? %>
                 <%= image_tag post.photo, class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
+              <% else %>
+                    <%= image_tag 'default_image.png', class: 'card-img-top mb-3', style: 'max-height: 200px;'  %>
+<!--                <img src="/assets/default_image.png" alt="profile photo" class="card-img-top mb-3" />-->
               <% end %>
               <!-- Други полета от поста -->
             </div>

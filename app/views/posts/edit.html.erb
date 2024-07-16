@@ -6,12 +6,7 @@
           <h4>Edit Post</h4>
         </div>
         <div class="card-body">
-          <%#= form_with(model: @post, url: post_path(@post), method: :patch, local: true) do |form| %>
           <%= form_with(model: @post, url: post_path(@post), method: :patch, multipart: true) do |form| %>
-            <%= form.hidden_field :_method, value: 'patch' %>
-
-            <%#= form.error_messages %>
-
             <div class="form-group">
               <%= form.label :title %>
               <%= form.text_field :title, class: 'form-control' %>
@@ -23,19 +18,23 @@
             </div>
 
             <div class="form-group">
-              <%= form.label :date %>
-              <%= form.date_field :date, class: 'form-control' %>
+              <%= form.label :post_date %>
+              <%= form.date_field :post_date, class: 'form-control' %>
             </div>
 
             <div class="form-group">
-              <%= form.label :photo %>
-              <%= form.file_field :photo, class: 'form-control' %>
+              <%= form.label :photos, "Upload New Photos" %>
+              <%= form.file_field :photos, multiple: true, class: 'form-control' %>
             </div>
 
-<!--            <div class="form-group">-->
-              <%#= form.label :photos %>
-              <%#= form.file_field :photos, class: 'form-control', multiple: true %>
-<!--            </div>-->
+            <div class="row mt-3 mb-3">
+              <% @post.photos.each do |photo| %>
+                <div class="col-md-3">
+                  <%= image_tag photo, class: 'img-fluid' %>
+                  <%= link_to 'Delete', delete_post_photo_path(@post, photo.id), method: :delete, data: { confirm: 'Сигурни ли сте?' }, class: 'btn btn-danger mt-2' %>
+                </div>
+              <% end %>
+            </div>
 
             <div class="actions">
               <%= form.submit 'Update Post', class: 'btn btn-primary' %>

@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   devise_for :users
   resources :users, only: [:show]
   resources :posts, only: %i[index new create edit update destroy show]
+  delete 'posts/:id/photo/:photo_id', to: 'posts#delete_photo', as: 'delete_post_photo'
+
+
   # или
   # get 'users/:id', to: 'users#show', as: :user_profile
 end

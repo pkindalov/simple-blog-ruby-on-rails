@@ -26,7 +26,8 @@
         <% if user_signed_in? %>
           <li class="nav-item">
             <%= link_to user_profile_path(current_user), class: "nav-link" do %>
-              <%= image_tag(current_user.profile_photo, class: "rounded-circle", size: "30x30", alt: "Profile Photo") %>
+              <%= image_tag current_user.profile_photo ? current_user.profile_photo : 'default_image.png', class: "rounded-circle", size: "30x30", alt: "Profile Photo" %>
+              <%#= image_tag 'default_image.png', class: "rounded-circle", size: "30x30", alt: "Profile Photo" %>
               <%= current_user.email %>
             <% end %>
           </li>

@@ -7,7 +7,6 @@
         </div>
         <div class="card-body">
           <%= form_for Post.new, url: posts_path, html: { multipart: true } do |f| %>
-            <%#= form_with model: @post, url: posts_path, method: :post, multipart: true do |f| %>
             <div class="form-group">
               <%= f.label :title %>
               <%= f.text_field :title, class: 'form-control' %>
@@ -20,15 +19,10 @@
               <%= f.label :post_date %>
               <%= f.date_field :post_date, class: 'form-control' %>
             </div>
-<!--            <div class="form-group mt-3">-->
-              <%= f.label :photo %>
-              <%= f.file_field :photo, class: 'form-control' %>
-<!--            </div>-->
-<!--            <div class="form-group">-->
-              <%#= form.label :photos %>
-              <%#= form.file_field :photos, class: 'form-control', multiple: true %>
-<!--            </div>-->
-
+            <div class="form-group mt-3">
+              <%= f.label :photos, "Upload Photos" %>
+              <%= f.file_field :photos, multiple: true, class: 'form-control' %>
+            </div>
             <div class="form-group mt-3">
               <%= f.submit 'Create', class: 'btn btn-primary' %>
             </div>

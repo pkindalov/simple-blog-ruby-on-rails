@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get 'users/show'
-  root "home#index"
+  root 'home#index'
   get 'about', to: 'home#about'
   get 'services', to: 'home#services'
   get 'contacts', to: 'home#contacts'
@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :users, only: [:show]
-  resources :posts, only: [:new, :create, :edit, :update, :destroy]
+  resources :posts, only: %i[index new create edit update destroy show]
   # или
   # get 'users/:id', to: 'users#show', as: :user_profile
 end

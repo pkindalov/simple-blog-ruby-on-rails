@@ -1,0 +1,35 @@
+<!-- app/views/posts/index.html.erb -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Posts</title>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true, type: "module" %>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="mb-4">All Posts</h1>
+
+  <%= link_to 'Create New Post', new_post_path, class: 'btn btn-primary mb-3' %>
+
+  <% @posts.each do |post| %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title"><%= post.title %></h5>
+        <p class="card-text"><%= post.description %></p>
+        <p class="card-text"><small class="text-muted">Posted on <%= post.post_date %></small></p>
+        <% if post.user_id == current_user.id %>
+          <%= link_to 'Edit', edit_post_path(post), class: 'btn btn-primary mx-2' %>
+          <%= link_to 'Delete', post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+      <% end %>
+        <%= link_to 'Show', post_path(post), class: 'btn btn-info' %>
+      </div>
+    </div>
+  <% end %>
+  <div class="text-center">
+    <%= will_paginate @posts, renderer: BootstrapPagination::Rails %>
+  </div>
+</div>
+</body>
+</html>

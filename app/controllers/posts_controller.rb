@@ -1,13 +1,25 @@
+# frozen_string_literal: true
+
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, only: [:edit, :update, :destroy]
+  before_action :set_post, only: %i[edit update destroy]
 
   def edit
     # Не е необходимо да вземаш поста, защото го вземаме в before_action
   end
 
+  def show
+    @post = Post.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: 'Post not found'
+  end
+
+  def index
+    @posts = Post.paginate(:page => params[:page], :per_page => 3).order('created_at DESC')
+  end
+
   def create
-    @post = current_user.posts.build(post_params)  # Създаваме поста за текущия потребител
+    @post = current_user.posts.build(post_params) # Създаваме поста за текущия потребител
     # @post.photo.attach(params[:post][:photo]) if params[:post][:photo]
 
     # Rails.logger.debug "Post Params: #{post_params.inspect}"
@@ -43,7 +55,9 @@ class PostsController < ApplicationController
   private
 
   def set_post
-    @post = current_user.posts.find(params[:id])  # Намираме поста само за текущия потребител
+    @post = current_user.posts.find(params[:id]) # Намираме поста само за текущия потребител
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: 'Post could not be found.'
   end
 
   def post_params

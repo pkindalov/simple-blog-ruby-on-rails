@@ -36,6 +36,14 @@
               <% end %>
             </div>
 
+            <div class="row mt-3 mb-3">
+              <% if @post.photos.attached? %>
+                <% @post.photos.each do |ph| %>
+                  <%= form.hidden_field :photos, multiple: true, value: ph.signed_id %>
+                <% end %>
+              <% end %>
+            </div>
+
             <div class="actions">
               <%= form.submit 'Update Post', class: 'btn btn-primary' %>
             </div>

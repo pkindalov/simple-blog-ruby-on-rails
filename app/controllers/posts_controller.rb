@@ -38,16 +38,7 @@ class PostsController < ApplicationController
   def update
     @post = Post.find(params[:id])
 
-    # Проверяваме дали има избрани снимки за изтриване
-    # if params[:deleted_photo_ids].present?
-    #   params[:deleted_photo_ids].each do |photo_id|
-    #     photo = @post.photos.find_by(id: photo_id)
-    #     photo&.purge
-    #     puts 'deleted'
-    #   end
-    # end
-
-    if @post.update(post_params.except(:photos))
+    if @post.update(post_params)
       puts 'Post updated successfully'
       redirect_to @post, notice: 'Post was successfully updated.'
     else

@@ -6,6 +6,7 @@
           <h4><%= @post.title %></h4>
         </div>
         <div class="card-body">
+          <p>👁 <%= @post.views_count %></p>
           <p><%= @post.description %></p>
           <p><%= @post.post_date %></p>
           <p>Likes 👍: <%= @post.likes.count %></p>
@@ -43,7 +44,7 @@
                 <% end %>
               <% end %>
 
-              <a href="#" class="btn disabled"><%= @post.likes.count %></a>
+              <a href="#" class="btn disabled">👥 👍 <%= @post.likes.count %></a>
 
               <!-- Добавете други бутони тук, ако е необходимо -->
             </div>

@@ -60,9 +60,10 @@
               <div class="card-body">
                 <h4 class="card-title mb-5">🖋 <%= post.title %></h4>
                 <hr />
+                <p class="card-text">👁 Viewed <%= post.views_count %> times</p>
                 <p class="card-text">📝 <%= post.description %></p>
-                <p class="card-text">📷 <%= post.photos.count %></p>
-                <p class="card-text mb-5">📅 <%= post.created_at.strftime("%d %B %Y") %></p>
+                <p class="card-text">📷 Photos <%= post.photos.count %></p>
+                <p class="card-text mb-5">📅 Posted on <%= post.created_at.strftime("%d %B %Y") %></p>
 
 <!--                <p class="card-text"><small class="text-muted"><%#= post.post_date %></small></p>-->
                 <% if post.user_id == current_user.id %>

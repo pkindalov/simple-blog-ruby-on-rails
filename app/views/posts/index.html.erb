@@ -23,8 +23,9 @@
         <% end %>
         <h5 class="card-title mt-3 mb-5">🖋 <%= post.title %></h5>
         <hr />
+        <p class="card-text">👁 Viewed <%= post.views_count %> times</p>
         <p class="card-text">📝 <%= post.description %></p>
-        <p class="card-text">📷 <%= post.photos.count %></p>
+        <p class="card-text">📷 Photos <%= post.photos.count %></p>
         <p class="card-text">Likes 👍: <%= post.likes.count %></p>
         <p class="card-text mb-5">📅 <small class="text-muted">Posted on <%= post.post_date %></small></p>
         <% if post.user_id == current_user.id %>

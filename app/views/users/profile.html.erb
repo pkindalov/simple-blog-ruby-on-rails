@@ -29,6 +29,7 @@
             <div class="card-body">
               <h5 class="card-title"><%= post.title %></h5>
               <p class="card-text"><%= post.description %></p>
+              <p class="card-text">Likes 👍: <%= post.likes.count %></p>
               <!-- Показване на снимките, ако има -->
               <% if post.photo.respond_to?('attached') && post.photo.attached? %>
                 <%= image_tag post.photo, class: 'card-img-top mb-3', style: 'max-height: 200px;' %>

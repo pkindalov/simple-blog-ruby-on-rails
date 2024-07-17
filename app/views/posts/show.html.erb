@@ -8,6 +8,7 @@
         <div class="card-body">
           <p><%= @post.description %></p>
           <p><%= @post.post_date %></p>
+          <p>Likes 👍: <%= @post.likes.count %></p>
 
           <!-- Bootstrap Carousel for Photos -->
           <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -27,6 +28,20 @@
               <span class="visually-hidden">Next</span>
             </button>
           </div>
+
+          <% unless current_user == @post.user %>
+            <% if already_liked?(@post) %>
+              <%= link_to 'Unlike', post_like_path(@post, @post.likes.find_by(user_id: current_user.id)), method: :delete %>
+            <% else %>
+              <%= link_to 'Like', post_likes_path(@post), method: :post %>
+            <% end %>
+          <% end %>
+
+          <%# if already_liked?(@post) %>
+            <%#= link_to 'Unlike', post_like_path(@post, @post.likes.find_by(user_id: current_user.id)), method: :delete %>
+          <%# else %>
+            <%#= link_to 'Like', post_likes_path(@post), method: :post %>
+          <%# end %>
 
           <%= link_to 'Back to Posts', posts_path, class: 'btn btn-secondary mt-3' %>
         </div>

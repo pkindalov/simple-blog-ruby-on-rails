@@ -18,6 +18,7 @@
       <div class="card-body">
         <h5 class="card-title"><%= post.title %></h5>
         <p class="card-text"><%= post.description %></p>
+        <p class="card-text">Likes 👍: <%= post.likes.count %></p>
         <p class="card-text"><small class="text-muted">Posted on <%= post.post_date %></small></p>
         <% if post.user_id == current_user.id %>
           <%= link_to 'Edit', edit_post_path(post), class: 'btn btn-primary mx-2' %>

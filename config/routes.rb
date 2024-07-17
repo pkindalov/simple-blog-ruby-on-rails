@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   get 'users/show'
   root 'home#index'
@@ -10,7 +12,9 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :users, only: [:show]
-  resources :posts, only: %i[index new create edit update destroy show]
+  resources :posts, only: %i[index new create edit update destroy show] do
+    resources :likes, only: [:create, :destroy]
+  end
   delete 'posts/:id/photo/:photo_id', to: 'posts#delete_photo', as: 'delete_post_photo'
 
   # или

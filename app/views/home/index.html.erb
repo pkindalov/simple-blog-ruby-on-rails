@@ -51,8 +51,8 @@
 
           <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-              <% if post && post.photo.respond_to?('attached') %>
-                <%= image_tag url_for(post.photo), class: 'card-img-top', alt: 'Post Image' %>
+              <% if post && post.photos.attached? %>
+                <%= image_tag url_for(post.photos[0]), class: 'card-img-top', alt: 'Post Image' %>
               <% else %>
                 <!-- Покажи някаква дефоултна снимка или нищо, според вашия дизайн -->
                 <%= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default Image' %>

@@ -16,6 +16,11 @@
   <% @posts.each do |post| %>
     <div class="card mb-3">
       <div class="card-body">
+        <% if post && post.photos.attached? %>
+          <%= image_tag url_for(post.photos[0]), class: 'card-img-top img-fluid w-25', alt: 'Post Image' %>
+        <% else %>
+          <%= image_tag 'default_image.png', class: 'card-img-top img-fluid w-25', alt: 'Default Image' %>
+        <% end %>
         <h5 class="card-title"><%= post.title %></h5>
         <p class="card-text"><%= post.description %></p>
         <p class="card-text">Likes 👍: <%= post.likes.count %></p>

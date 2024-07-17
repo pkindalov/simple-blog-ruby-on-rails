@@ -66,6 +66,7 @@
                   <%= link_to 'Редактирай', edit_post_path(post), class: 'btn btn-primary' %>
                   <%= link_to 'Изтрий', post, method: :delete, data: { confirm: 'Сигурни ли сте?' }, class: 'btn btn-danger' %>
                 <% end %>
+                <%= link_to 'Show', post_path(post), class: 'btn btn-info' %>
               </div>
             </div>
           </div>

@@ -22,7 +22,11 @@ module Sortable
                Post.left_joins(:likes).group('posts.id')
                    .paginate(page: params[:page], per_page: 5)
                    .order('COUNT(likes.id) DESC')
-             else #recent
+             when 'author_asc'
+               Post.joins(:user).paginate(page: params[:page], per_page: 5).order(email: :asc)
+             when 'author_desc'
+               Post.joins(:user).paginate(page: params[:page], per_page: 5).order(email: :desc)
+             else # recent
                Post.paginate(page: params[:page], per_page: 5).order(created_at: :desc)
              end
   end

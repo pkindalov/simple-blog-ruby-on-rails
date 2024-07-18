@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>MyApp</title>
+  <title>Simple Blog</title>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true, type: "module" %>
 </head>
@@ -23,15 +23,15 @@
       <% if current_user %>
 
         <%= render "layouts/filter_posts" %>
-<!--        <div class="mb-3 d-flex align-items-center w-25">-->
-<!--          <label for="sort_by" class="form-label me-2 w-25">Sort By:</label>-->
-<!--          <select class="form-select" id="sort_by" aria-label="Sort by">-->
-<!--            <option value="recent" <%#= 'selected' if @sort_by == 'recent' %>>Recent</option>-->
-<!--            <option value="views" <%#= 'selected' if @sort_by == 'views' %>>Views Count</option>-->
-<!--            <option value="photos" <%#= 'selected' if @sort_by == 'photos' %>>Photos Count</option>-->
-<!--            <option value="likes" <%#= 'selected' if @sort_by == 'likes' %>>Most Liked</option>-->
-<!--          </select>-->
-<!--        </div>-->
+        <!--        <div class="mb-3 d-flex align-items-center w-25">-->
+        <!--          <label for="sort_by" class="form-label me-2 w-25">Sort By:</label>-->
+        <!--          <select class="form-select" id="sort_by" aria-label="Sort by">-->
+        <!--            <option value="recent" <%#= 'selected' if @sort_by == 'recent' %>>Recent</option>-->
+        <!--            <option value="views" <%#= 'selected' if @sort_by == 'views' %>>Views Count</option>-->
+        <!--            <option value="photos" <%#= 'selected' if @sort_by == 'photos' %>>Photos Count</option>-->
+        <!--            <option value="likes" <%#= 'selected' if @sort_by == 'likes' %>>Most Liked</option>-->
+        <!--          </select>-->
+        <!--        </div>-->
 
 
 
@@ -74,6 +74,11 @@
                   <p class="card-text">📝 <%= post.description %></p>
                   <p class="card-text">📷 Photos <%= post.photos.count %></p>
                   <p class="card-text mb-5">📅 Posted on <%= post.created_at.strftime("%d %B %Y") %></p>
+                  <% if post.user_id == current_user.id %>
+                    <p class="card-text">👤 Author You </p>
+                  <% else %>
+                    <p class="card-text">👤 Author <%= current_user.email %> </p>
+                  <% end %>
 
                   <!--                <p class="card-text"><small class="text-muted"><%#= post.post_date %></small></p>-->
                   <% if post.user_id == current_user.id %>

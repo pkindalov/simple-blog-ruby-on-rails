@@ -2,6 +2,7 @@
 # require 'pp'
 
 class PostsController < ApplicationController
+  include Sortable
   before_action :authenticate_user!
   before_action :set_post, only: %i[edit update destroy]
 
@@ -17,7 +18,7 @@ class PostsController < ApplicationController
   end
 
   def index
-    @posts = Post.paginate(:page => params[:page], :per_page => 3).order('created_at DESC')
+    # @posts = Post.paginate(:page => params[:page], :per_page => 3).order('created_at DESC')
   end
 
   def create

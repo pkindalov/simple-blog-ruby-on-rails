@@ -21,15 +21,17 @@
       <!--      <h2 class="mb-0">Recent Posts</h2>-->
 
       <% if current_user %>
-        <div class="mb-3 d-flex align-items-center w-25">
-          <label for="sort_by" class="form-label me-2 w-25">Sort By:</label>
-          <select class="form-select" id="sort_by" aria-label="Sort by">
-            <option value="recent" <%= 'selected' if @sort_by == 'recent' %>>Recent</option>
-            <option value="views" <%= 'selected' if @sort_by == 'views' %>>Views Count</option>
-            <option value="photos" <%= 'selected' if @sort_by == 'photos' %>>Photos Count</option>
-            <option value="likes" <%= 'selected' if @sort_by == 'likes' %>>Most Liked</option>
-          </select>
-        </div>
+
+        <%= render "layouts/filter_posts" %>
+<!--        <div class="mb-3 d-flex align-items-center w-25">-->
+<!--          <label for="sort_by" class="form-label me-2 w-25">Sort By:</label>-->
+<!--          <select class="form-select" id="sort_by" aria-label="Sort by">-->
+<!--            <option value="recent" <%#= 'selected' if @sort_by == 'recent' %>>Recent</option>-->
+<!--            <option value="views" <%#= 'selected' if @sort_by == 'views' %>>Views Count</option>-->
+<!--            <option value="photos" <%#= 'selected' if @sort_by == 'photos' %>>Photos Count</option>-->
+<!--            <option value="likes" <%#= 'selected' if @sort_by == 'likes' %>>Most Liked</option>-->
+<!--          </select>-->
+<!--        </div>-->
 
 
 

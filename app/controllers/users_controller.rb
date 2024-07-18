@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:show, :profile, :settings, :update]
-  before_action :set_user, only: [:show, :profile, :settings, :update]
+  before_action :authenticate_user!, only: [:show, :profile, :settings, :update, :delete_avatar]
+  before_action :set_user, only: [:show, :profile, :settings, :update, :delete_avatar]
 
   def show
     # set_user вече задава @user
@@ -34,6 +34,11 @@ class UsersController < ApplicationController
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def delete_avatar
+    @user.avatar.purge
+    redirect_to user_profile_path(@user), notice: 'Avatar successfully removed.'
   end
 
   private

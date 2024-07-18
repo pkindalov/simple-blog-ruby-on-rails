@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :likes, only: [:create, :destroy]
   end
   delete 'posts/:id/photo/:photo_id', to: 'posts#delete_photo', as: 'delete_post_photo'
+  delete 'users/:id/avatar', to: 'users#delete_avatar', as: 'delete_avatar'
 
   # или
   # get 'users/:id', to: 'users#show', as: :user_profile

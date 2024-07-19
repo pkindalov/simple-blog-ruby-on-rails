@@ -31,33 +31,12 @@
       </div>
     </div>
     <div class="col-md-8">
-      <!-- Секция с постовете на потребителя -->
-      <h3 class="mt-4">My Posts</h3>
       <% if @posts.any? %>
-        <% @posts.each do |post| %>
-          <div class="card mt-3">
-            <div class="card-body">
-              <h5 class="card-title"><%= post.title %></h5>
-              <p class="card-text"><%= post.description %></p>
-              <p class="card-text">Likes 👍: <%= post.likes.count %></p>
-              <!-- Показване на снимките, ако има -->
-              <% if post.photo.respond_to?('attached') && post.photo.attached? %>
-                <%= image_tag post.photo, class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
-              <% else %>
-                <%= image_tag 'default_image.png', class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
-                <!--                <img src="/assets/default_image.png" alt="profile photo" class="card-img-top mb-3" />-->
-              <% end %>
-            </div>
-
-            <% if post.user_id == current_user.id %>
-              <div class="btn-group" role="group" aria-label="Post Actions">
-                <%= link_to 'Редактирай', edit_post_path(post), class: 'btn btn-primary' %>
-                <%= link_to 'Изтрий', post, method: :delete, data: { confirm: 'Сигурни ли сте?' }, class: 'btn btn-danger' %>
-              </div>
-            <% end %>
-
-          </div>
-        <% end %>
+        <div class="row">
+          <% @posts.each do |post| %>
+            <%= render "layouts/post_card", post: post %>
+          <% end %>
+        </div>
 
         <div class="text-center">
           <%= will_paginate @posts, renderer: BootstrapPagination::Rails %>

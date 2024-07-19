@@ -16,94 +16,18 @@
 
 <section class="py-5">
   <div class="container">
-
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <!--      <h2 class="mb-0">Recent Posts</h2>-->
 
       <% if current_user %>
 
         <%= render "layouts/filter_posts" %>
-        <!--        <div class="mb-3 d-flex align-items-center w-25">-->
-        <!--          <label for="sort_by" class="form-label me-2 w-25">Sort By:</label>-->
-        <!--          <select class="form-select" id="sort_by" aria-label="Sort by">-->
-        <!--            <option value="recent" <%#= 'selected' if @sort_by == 'recent' %>>Recent</option>-->
-        <!--            <option value="views" <%#= 'selected' if @sort_by == 'views' %>>Views Count</option>-->
-        <!--            <option value="photos" <%#= 'selected' if @sort_by == 'photos' %>>Photos Count</option>-->
-        <!--            <option value="likes" <%#= 'selected' if @sort_by == 'likes' %>>Most Liked</option>-->
-        <!--          </select>-->
-        <!--        </div>-->
-
-
-
-        <%#= form_tag('/', method: :get) do %>
-        <%#= select_tag 'sort_by', options_for_select([['Recent', 'recent'], ['Views Count', 'views'], ['Photos Count', 'photos']], params[:sort_by]), id: 'sort_by', class: 'form-control' %>
-        <%#= submit_tag 'Sort' %>
-        <%# end %>
-
-
-        <!--        <form action="<%#= posts_path %>" method="get" class="form-inline">-->
-        <!--          <label for="sort_by" class="mr-2">Sort by:</label>-->
-        <!--          <select name="sort_by" id="sort_by">-->
-        <!--            <option value="recent">Recent</option>-->
-        <!--            <option value="views">Views Count</option>-->
-        <!--            <option value="photos">Photos Count</option>-->
-        <!--          </select>-->
-        <!--          <button type="submit" class="btn btn-primary">Sort</button>-->
-        <!--        </form>-->
         </div>
+
         <h2>Recent Posts</h2>
         <div class="row">
-          <%#= current_user.id %>
           <% @posts.each do |post| %>
-
-            <%#= post.inspect %>
-            <%#= debug post %>
-
-            <div class="col-lg-4 col-md-6 mb-4">
-              <div class="card h-100">
-                <% if post && post.photos.attached? %>
-                  <%= image_tag url_for(post.photos[0]), class: 'card-img-top', alt: 'Post Image' %>
-                <% else %>
-                  <!-- Покажи някаква дефоултна снимка или нищо, според вашия дизайн -->
-                  <%= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default Image' %>
-                <% end %>
-                <div class="card-body">
-                  <h4 class="card-title mb-5">🖋 <%= post.title %></h4>
-                  <hr/>
-                  <p class="card-text">👁 Viewed <%= post.views_count %> times</p>
-                  <p class="card-text">📝 <%= post.description %></p>
-                  <p class="card-text">📷 Photos <%= post.photos.count %></p>
-                  <p class="card-text mb-5">📅 Posted on <%= post.created_at.strftime("%d %B %Y") %></p>
-                  <% if post.user_id == current_user.id %>
-                    <p class="card-text">👤 Author You </p>
-                  <% else %>
-                    <p class="card-text">👤 Author <%= current_user.email %> </p>
-                  <% end %>
-
-                  <!--                <p class="card-text"><small class="text-muted"><%#= post.post_date %></small></p>-->
-                  <% if post.user_id == current_user.id %>
-                    <%= link_to '🖊 Edit', edit_post_path(post), class: 'btn btn-primary' %>
-                    <%= link_to '❌ Delete', post, method: :delete, data: { confirm: 'Сигурни ли сте?' }, class: 'btn btn-danger' %>
-                  <% end %>
-                  <%= link_to '👀 Show', post_path(post), class: 'btn btn-info' %>
-                  <% unless current_user == post.user %>
-                    <% if already_liked?(post) %>
-                      <%= link_to post_like_path(post, post.likes.find_by(user_id: current_user.id)), method: :delete, class: 'btn btn-primary' do %>
-                        👎 Unlike
-                      <% end %>
-                    <% else %>
-                      <%= link_to post_likes_path(post), method: :post, class: 'btn btn-primary' do %>
-                        👍 Like
-                      <% end %>
-                    <% end %>
-                  <% end %>
-
-                  <a href="#" class="btn disabled">👥 👍<%= post.likes.count %></a>
-                </div>
-              </div>
-            </div>
+            <%= render "layouts/post_card", post: post %>
           <% end %>
-
         </div>
 
         <div class="text-center">
@@ -128,9 +52,10 @@
             <a href="<%= contacts_path %>" class="btn btn-primary">Contact</a>
           </div>
         </div>
+        </div>
       <% end %>
-      </div>
-</section>
+
+      </section>
 
 <footer class="bg-light text-center py-4">
   <div class="container">

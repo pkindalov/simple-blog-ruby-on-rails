@@ -30,6 +30,32 @@
             </button>
           </div>
 
+          <!-- Comments Section -->
+          <section>
+            <h3>Comments:</h3>
+            <div class="list-group">
+              <% @comments.each do |comment| %>
+                <div class="list-group-item list-group-item-action flex-column align-items-start">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><%= comment.user.email %></h5>
+                    <small><%= time_ago_in_words(comment.created_at) %> ago</small>
+                  </div>
+                  <p class="mb-1"><%= comment.content %></p>
+                </div>
+              <% end %>
+              <div class="text-center">
+                <%= will_paginate @comments, renderer: BootstrapPagination::Rails %>
+              </div>
+            </div>
+
+            <%= form_with(model: [ @post, @comment ], local: true) do |form| %>
+              <div class="form-group mt-3">
+                <%= form.text_area :content, class: 'form-control', rows: 3 %>
+              </div>
+              <%= form.submit "Add Comment", class: 'btn btn-primary' %>
+            <% end %>
+          </section>
+
           <div class="mt-3" style="display: flex; justify-content: space-between;">
             <div>
               <% unless current_user == @post.user %>
@@ -43,22 +69,13 @@
                   <% end %>
                 <% end %>
               <% end %>
-
               <a href="#" class="btn disabled">👥 👍 <%= @post.likes.count %></a>
-
-              <!-- Добавете други бутони тук, ако е необходимо -->
             </div>
             <div style="margin-left: auto;">
               <%= link_to 'Back to Posts', posts_path, class: 'btn btn-secondary' %>
             </div>
           </div>
         </div>
-
-
-
-
-
-
       </div>
     </div>
   </div>

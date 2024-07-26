@@ -36,20 +36,22 @@
             <div class="list-group">
               <% @comments.each do |comment| %>
                 <div class="list-group-item list-group-item-action flex-column align-items-start">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1"><%= comment.user.email %></h5>
+                  <div class="d-flex w-100 justify-content-between mt-3 mb-3">
+                    <h5 class="mb-3"><%= comment.user.email %></h5>
                     <small><%= time_ago_in_words(comment.created_at) %> ago</small>
                   </div>
-                  <p class="mb-1"><%= comment.content %></p>
+                  <p class="mb-3 mt-3"><%= comment.content %></p>
                   <% if current_user.likes.where(likeable: comment).exists? %>
-                    <%= link_to '👎 Unlike', post_comment_like_path(@post, comment, current_user.likes.find_by(likeable: comment)), method: :delete, class: 'btn btn-warning' %>
+                    <%= link_to '👎 Unlike', post_comment_like_path(@post, comment, current_user.likes.find_by(likeable: comment)), method: :delete, class: 'btn btn-warning mb-2' %>
                   <% else %>
-                    <%= link_to '👍 Like', post_comment_likes_path(@post, comment), method: :post, class: 'btn btn-success' %>
+                    <%= link_to '👍 Like', post_comment_likes_path(@post, comment), method: :post, class: 'btn btn-success mb-2' %>
                   <% end %>
 
+                  <a href="#" class="btn disabled mb-2">👥 👍 <%= comment.likes.count %></a>
+
                   <% if current_user.id == comment.user_id %>
-                    <%= link_to '✏️ Edit', edit_post_comment_path(@post, comment), class: 'btn btn-secondary' %>
-                    <%= link_to '❌ Delete', post_comment_path(@post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+                    <%= link_to '✏️ Edit', edit_post_comment_path(@post, comment), class: 'btn btn-secondary mb-2' %>
+                    <%= link_to '❌ Delete', post_comment_path(@post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger mb-2' %>
                   <% end %>
 
                 </div>

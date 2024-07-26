@@ -46,6 +46,12 @@
                   <% else %>
                     <%= link_to '👍 Like', post_comment_likes_path(@post, comment), method: :post, class: 'btn btn-success' %>
                   <% end %>
+
+                  <% if current_user.id == comment.user_id %>
+                    <%= link_to '✏️ Edit', edit_post_comment_path(@post, comment), class: 'btn btn-secondary' %>
+                    <%= link_to '❌ Delete', post_comment_path(@post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+                  <% end %>
+
                 </div>
               <% end %>
 
@@ -64,6 +70,7 @@
                   <%= link_to '👍 Like', post_likes_path(@post), method: :post, class: 'btn btn-primary' %>
                 <% end %>
               <% end %>
+
               <a href="#" class="btn disabled">👥 👍 <%= @post.likes.count %></a>
             </div>
             <div style="margin-left: auto;">

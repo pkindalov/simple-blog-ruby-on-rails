@@ -1,31 +1,29 @@
-# frozen_string_literal: true
-
 class LikesController < ApplicationController
-  before_action :find_post
+  include LikesHelper
+  before_action :find_likeable
 
   def create
-    if already_liked?
-      msg = "You can't like more than once"
+    if already_liked?(current_user, @likeable)
+      redirect_to request.referrer || root_path, alert: "You can't like more than once"
     else
-      @post.likes.create(user_id: current_user.id)
-      msg = "Liked successfully!"
+      @likeable.likes.create(user_id: current_user.id)
+      redirect_to request.referrer || root_path, notice: "Liked successfully!"
     end
-    redirect_to post_path(@post), notice: msg
   end
 
   def destroy
-    @like = @post.likes.find(params[:id])
-    @like.destroy
-    redirect_to post_path(@post)
+    like = @likeable.likes.find_by(user_id: current_user.id)
+    if like
+      like.destroy
+      redirect_to request.referrer || root_path, notice: "Like removed."
+    else
+      redirect_to request.referrer || root_path, alert: "Like not found."
+    end
   end
 
   private
 
-  def find_post
-    @post = Post.find(params[:post_id])
-  end
-
-  def already_liked?
-    Like.where(user_id: current_user.id, post_id: params[:post_id]).exists?
+  def find_likeable
+    @likeable = Comment.find_by(id: params[:comment_id]) || Post.find_by(id: params[:post_id])
   end
 end

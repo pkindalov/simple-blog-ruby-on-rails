@@ -1,47 +1,28 @@
 <div class="col-lg-4 col-md-6 mb-4">
   <div class="card h-100">
-    <% if post && post.photos.attached? %>
-      <%= image_tag url_for(post.photos[0]), class: 'card-img-top', alt: 'Post Image' %>
+    <% if post.photos.attached? %>
+      <%= image_tag url_for(post.photos.first), class: 'card-img-top', alt: 'Post Image' %>
     <% else %>
-      <!-- Покажи някаква дефоултна снимка или нищо, според вашия дизайн -->
       <%= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default Image' %>
     <% end %>
     <div class="card-body">
-      <h4 class="card-title mb-5">🖋 <%= post.title %></h4>
-      <hr/>
-      <p class="card-text">👁 Viewed <%= post.views_count %> times</p>
-      <p class="card-text">📝 <%= post.description %></p>
-      <p class="card-text">📷 Photos <%= post.photos.count %></p>
-      <p class="card-text">📅 Posted on <%= post.created_at.strftime("%d %B %Y") %></p>
-      <% if post.user_id == current_user.id %>
-        <%= link_to user_profile_path(current_user), class: "nav-link" do %>
-          <p class="card-text mb-5">👤 Author You </p>
-        <% end %>
-      <% else %>
-        <%= link_to user_profile_path(post.user), class: "nav-link" do %>
-          <p class="card-text mb-5">👤 Author  <%= post.user.email %> </p>
-        <% end %>
-      <% end %>
+      <h5 class="card-title"><%= post.title %></h5>
+      <p class="card-text"><%= post.description %></p>
+      <p class="card-text"><small class="text-muted">Posted on <%= post.created_at.strftime("%d %B %Y") %></small></p>
+      <p class="card-text"><small class="text-muted">Viewed <%= post.views_count %> times</small></p>
+      <p class="card-text"><small class="text-muted">Photos <%= post.photos.count %></small></p>
 
-      <div class="mt-5">
-        <% if post.user_id == current_user.id %>
-          <%= link_to '🖊 Edit', edit_post_path(post), class: 'btn btn-primary' %>
-          <%= link_to '❌ Delete', post, method: :delete, data: { confirm: 'Сигурни ли сте?' }, class: 'btn btn-danger' %>
-        <% end %>
+      <div class="btn-group" role="group" aria-label="Post Actions">
         <%= link_to '👀 Show', post_path(post), class: 'btn btn-info' %>
-        <% unless current_user == post.user %>
-          <% if already_liked?(post) %>
-            <%= link_to post_like_path(post, post.likes.find_by(user_id: current_user.id)), method: :delete, class: 'btn btn-primary' do %>
-              👎 Unlike
-            <% end %>
-          <% else %>
-            <%= link_to post_likes_path(post), method: :post, class: 'btn btn-primary' do %>
-              👍 Like
-            <% end %>
-          <% end %>
+        <% if post.user == current_user %>
+          <%= link_to '🖊 Edit', edit_post_path(post), class: 'btn btn-primary' %>
+          <%= link_to '❌ Delete', post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
         <% end %>
-
-        <a href="#" class="btn disabled">👥 👍<%= post.likes.count %></a>
+        <% if already_liked?(current_user, post) %>
+          <%= link_to '👎 Unlike', post_like_path(post, current_user.likes.find_by(likeable: post)), method: :delete, class: 'btn btn-warning' %>
+        <% else %>
+          <%= link_to '👍 Like', post_likes_path(post), method: :post, class: 'btn btn-success' %>
+        <% end %>
       </div>
     </div>
   </div>

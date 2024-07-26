@@ -6,9 +6,9 @@
           <h4><%= @post.title %></h4>
         </div>
         <div class="card-body">
-          <p>👁 <%= @post.views_count %></p>
+          <p>👁 <%= @post.views_count %> views</p>
           <p><%= @post.description %></p>
-          <p><%= @post.post_date %></p>
+          <p>Posted on <%= @post.post_date %></p>
           <p>Likes 👍: <%= @post.likes.count %></p>
 
           <!-- Bootstrap Carousel for Photos -->
@@ -41,37 +41,27 @@
                     <small><%= time_ago_in_words(comment.created_at) %> ago</small>
                   </div>
                   <p class="mb-1"><%= comment.content %></p>
-                  <% if comment.user == current_user %>
-                    <%= link_to 'Edit', edit_post_comment_path(@post,comment), class: 'btn btn-sm btn-secondary' %>
-                    <%= link_to 'Delete', post_comment_path(@post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
+                  <% if current_user.likes.where(likeable: comment).exists? %>
+                    <%= link_to '👎 Unlike', post_comment_like_path(@post, comment, current_user.likes.find_by(likeable: comment)), method: :delete, class: 'btn btn-warning' %>
+                  <% else %>
+                    <%= link_to '👍 Like', post_comment_likes_path(@post, comment), method: :post, class: 'btn btn-success' %>
                   <% end %>
                 </div>
               <% end %>
+
               <div class="text-center">
                 <%= will_paginate @comments, renderer: BootstrapPagination::Rails %>
               </div>
             </div>
-
-            <%= form_with(model: [ @post, @comment ], local: true) do |form| %>
-              <div class="form-group mt-3">
-                <%= form.text_area :content, class: 'form-control', rows: 3 %>
-              </div>
-              <%= form.submit "Add Comment", class: 'btn btn-primary' %>
-            <% end %>
           </section>
-
 
           <div class="mt-3" style="display: flex; justify-content: space-between;">
             <div>
               <% unless current_user == @post.user %>
-                <% if already_liked?(@post) %>
-                  <%= link_to post_like_path(@post, @post.likes.find_by(user_id: current_user.id)), method: :delete, class: 'btn btn-primary' do %>
-                    👎 Unlike
-                  <% end %>
+                <% if already_liked?(current_user, @post) %>
+                  <%= link_to '👎 Unlike', post_like_path(@post, @post.likes.find_by(user_id: current_user.id)), method: :delete, class: 'btn btn-primary' %>
                 <% else %>
-                  <%= link_to post_likes_path(@post), method: :post, class: 'btn btn-primary' do %>
-                    👍 Like
-                  <% end %>
+                  <%= link_to '👍 Like', post_likes_path(@post), method: :post, class: 'btn btn-primary' %>
                 <% end %>
               <% end %>
               <a href="#" class="btn disabled">👥 👍 <%= @post.likes.count %></a>

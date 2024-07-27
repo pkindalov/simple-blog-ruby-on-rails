@@ -2,36 +2,27 @@
   <div class="row">
     <div class="col-md-4">
       <div class="card">
-        <!--        <img src="<%#= url_for(@user.avatar) %>" class="card-img-top mb-3" style="max-height: 200px;">-->
+        <% if @user.avatar.attached? %>
+          <%= image_tag url_for(@user.avatar), class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
+        <% else %>
+          <%= image_tag 'default_image.png', class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
+        <% end %>
+
         <div class="card-body text-center">
-          <!-- Показване на аватара, ако има -->
-          <%# if @user.avatar.respond_to?('attached') %>
-          <%#= image_tag url_for(@user.avatar), class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
-          <%# else %>
-          <%#= image_tag 'default_image.png', class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
-          <%# end %>
-
-          <% if @user.avatar.attached? %>
-            <%= image_tag url_for(@user.avatar), class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
-          <% else %>
-            <%= image_tag 'default_image.png', class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
-          <% end %>
-
           <h5 class="card-title">User profile</h5>
           <p class="card-text"><%= @user.email %></p>
-          <!-- Други данни за профила -->
         </div>
         <div class="card-footer">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <%= link_to 'Edit Profile', edit_user_registration_path, class: 'btn btn-primary btn-block mb-3' %>
             <%= link_to 'Delete Avatar', delete_avatar_path(@user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
           </div>
-          <!-- link_to 'View My Posts', user_posts_path(@user), class: 'btn btn-outline-secondary btn-block' %>-->
         </div>
       </div>
     </div>
     <div class="col-md-8">
       <% if @posts.any? %>
+        <h4>My Posts</h4>
         <div class="row">
           <% @posts.each do |post| %>
             <%= render "layouts/post_card", post: post %>
@@ -39,10 +30,30 @@
         </div>
 
         <div class="text-center">
-          <%= will_paginate @posts, renderer: BootstrapPagination::Rails %>
+          <%= will_paginate @posts, renderer: BootstrapPagination::Rails, param_name: 'page' %>
         </div>
       <% else %>
         <p>No posts found.</p>
+      <% end %>
+
+      <% if @comments.any? %>
+        <h4>My Comments</h4>
+        <% @comments.each do |comment| %>
+          <div class="media mb-4">
+            <div class="media-body">
+              <h5 class="mt-0"><%= comment.user.email %>
+                on <%= link_to comment.post.title, post_path(comment.post) %></h5>
+              <p><%= comment.content %></p>
+              <%= link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="text-center">
+          <%= will_paginate @comments, renderer: BootstrapPagination::Rails, param_name: 'comments_page' %>
+        </div>
+      <% else %>
+        <p>No comments found.</p>
       <% end %>
     </div>
   </div>

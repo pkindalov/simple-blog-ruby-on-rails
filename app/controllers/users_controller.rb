@@ -8,7 +8,9 @@ class UsersController < ApplicationController
   end
 
   def profile
-    @posts = @user.posts.paginate(page: params[:page], per_page: 5)
+    @posts = @user.posts.paginate(page: params[:page], per_page: 10)
+    @comments = @user.comments.paginate(page: params[:comments_page], per_page: 10)
+    # @posts = @user.posts.paginate(page: params[:page], per_page: 5)
   end
 
   def settings

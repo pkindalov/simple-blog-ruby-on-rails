@@ -22,6 +22,10 @@ module Sortable
                Post.left_joins(:likes).group('posts.id')
                    .paginate(page: params[:page], per_page: 5)
                    .order('COUNT(likes.id) DESC')
+             when 'comments'
+               Post.left_joins(:comments).group('posts.id')
+                   .paginate(page: params[:page], per_page: 5)
+                   .order('COUNT(comments.id) DESC')
              when 'author_asc'
                Post.joins(:user).paginate(page: params[:page], per_page: 5).order(email: :asc)
              when 'author_desc'

@@ -14,6 +14,7 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     @post.increment!(:views_count)
     @comments = @post.comments.includes(:user).paginate(:page => params[:page], :per_page => 10).order('created_at DESC')
+    @total_comments_count = @post.comments.count
     @comment = Comment.new
   rescue ActiveRecord::RecordNotFound
     redirect_to root_path, alert: 'Post not found'

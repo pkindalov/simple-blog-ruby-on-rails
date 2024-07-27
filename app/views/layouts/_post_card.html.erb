@@ -6,11 +6,12 @@
       <%= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default Image' %>
     <% end %>
     <div class="card-body">
-      <h5 class="card-title"><%= post.title %></h5>
-      <p class="card-text"><%= post.description %></p>
-      <p class="card-text"><small class="text-muted">Posted on <%= post.created_at.strftime("%d %B %Y") %></small></p>
-      <p class="card-text"><small class="text-muted">Viewed <%= post.views_count %> times</small></p>
-      <p class="card-text"><small class="text-muted">Photos <%= post.photos.count %></small></p>
+      <h5 class="card-title mb-5">🔖 <%= post.title %></h5>
+      <p class="card-text">📄 <%= post.description %></p>
+      <p class="card-text">📅 <small class="text-muted">Posted on <%= post.created_at.strftime("%d %B %Y") %></small></p>
+      <p class="card-text">👁 <small class="text-muted">Viewed <%= post.views_count %> times</small></p>
+      <p class="card-text">📷 <small class="text-muted">Photos <%= post.photos.count %></small></p>
+      <p class="card-text">🗣 <small class="text-muted">Comments <%=  post.comments.count || 0 %></small></p>
 
       <div class="btn-group" role="group" aria-label="Post Actions">
         <%= link_to '👀 Show', post_path(post), class: 'btn btn-info' %>

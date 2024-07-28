@@ -38,6 +38,13 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  config.active_storage.routes_prefix = '/rails/active_storage'
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
+
+  # Задаване на глобални URL опции за Active Storage
+  config.active_storage.resolve_model_to_route = :rails_storage_redirect
+  config.active_storage.default_url_options = { host: 'localhost' }  # Сменете 'example.com' с вашия домейн или request.base_url
+
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
   # Don't care if the mailer can't send.

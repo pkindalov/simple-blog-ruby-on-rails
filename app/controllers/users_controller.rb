@@ -43,6 +43,14 @@ class UsersController < ApplicationController
     redirect_to user_profile_path(@user), notice: 'Avatar successfully removed.'
   end
 
+  def download_posts_pdf
+    Rails.application.routes.default_url_options[:host] = request.base_url
+    user = User.find(params[:id])
+    pdf_generator = UserPostsPdfGenerator.new(user)
+    pdf_generator.generate_pdf
+    send_file "#{Rails.root}/public/#{user.email}_posts.pdf", type: 'application/pdf', disposition: 'attachment'
+  end
+
   private
 
   def set_user

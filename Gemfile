@@ -45,6 +45,8 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 gem 'devise'
+gem 'mini_magick'
+gem 'prawn'
 gem 'sassc-rails'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap', '~> 1.0.2'

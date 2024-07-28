@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'services', to: 'home#services'
   get 'contacts', to: 'home#contacts'
   get 'users/:id/profile', to: 'users#profile', as: 'user_profile'
+  get 'users/:id/download_posts', to: 'users#download_posts_pdf', as: 'download_user_posts'
 
   devise_for :users
   resources :users, only: [:show]

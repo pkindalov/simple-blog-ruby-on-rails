@@ -48,6 +48,7 @@ gem 'devise'
 gem 'mini_magick'
 gem 'prawn'
 gem 'sassc-rails'
+gem 'whenever', require: false
 gem 'will_paginate'
 gem 'will_paginate-bootstrap', '~> 1.0.2'
 

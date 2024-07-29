@@ -31,9 +31,10 @@
             </button>
           </div>
 
+          <%= link_to '💾 Download as PDF', download_pdf_post_path(@post), class: 'btn btn-primary mt-3 mb-3' %>
           <!-- Comments Section -->
           <section>
-            <h3>Comments:</h3>
+            <h3 class="mb-5">Comments:</h3>
             <div class="list-group">
               <% @comments.each do |comment| %>
                 <div class="list-group-item list-group-item-action flex-column align-items-start">

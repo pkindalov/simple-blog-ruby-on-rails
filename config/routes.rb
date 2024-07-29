@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   resources :users, only: [:show]
 
   resources :posts do
+    member do
+      get 'download_pdf'
+    end
     resources :comments, only: [:create, :edit, :update, :destroy] do
       resources :likes, only: [:create, :destroy]
     end

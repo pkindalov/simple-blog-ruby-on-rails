@@ -74,6 +74,14 @@ class PostsController < ApplicationController
     end
   end
 
+  def download_pdf
+    Rails.application.routes.default_url_options[:host] = request.base_url
+    post = Post.find(params[:id])
+    pdf_generator = PostPdfGenerator.new(post) # Предполагам, че имаш подобен клас за един пост
+    pdf_generator.generate_pdf
+    send_file "#{Rails.root}/public/#{post.title.parameterize}_post.pdf", type: 'application/pdf', disposition: 'attachment'
+  end
+
   private
 
   def set_post

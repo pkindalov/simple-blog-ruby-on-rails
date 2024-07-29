@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_26_074213) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_29_114257) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -68,6 +68,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_26_074213) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.integer "views_count", default: 0
+    t.integer "downloaded_as_pdf", default: 0
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -88,5 +89,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_26_074213) do
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "likes", "users"
-  add_foreign_key "posts", "users"
+  add_foreign_key "posts", "users", primary_key: "id"
 end

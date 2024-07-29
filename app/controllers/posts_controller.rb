@@ -74,10 +74,30 @@ class PostsController < ApplicationController
     end
   end
 
+  # def download_pdf
+  #   Rails.application.routes.default_url_options[:host] = request.base_url
+  #   post = Post.find(params[:id])
+  #   post.increment!(:downloaded_as_pdf)
+  #   pdf_generator = PostPdfGenerator.new(post) # Предполагам, че имаш подобен клас за един пост
+  #   pdf_generator.generate_pdf
+  #   send_file "#{Rails.root}/public/#{post.title.parameterize}_post.pdf", type: 'application/pdf', disposition: 'attachment'
+  # end
+
   def download_pdf
     Rails.application.routes.default_url_options[:host] = request.base_url
     post = Post.find(params[:id])
-    pdf_generator = PostPdfGenerator.new(post) # Предполагам, че имаш подобен клас за един пост
+
+    # Блокиране на повторно изпълнение на увеличаване, ако това вече е направено в рамките на последните секунди
+    if session[:last_downloaded].present? && session[:last_downloaded] == post.id && session[:last_downloaded_at].present? && Time.now - session[:last_downloaded_at].to_time < 5
+      # Ако условието е изпълнено, не правим нищо
+    else
+      post.increment!(:downloaded_as_pdf)
+      session[:last_downloaded] = post.id
+      session[:last_downloaded_at] = Time.now
+    end
+
+
+    pdf_generator = PostPdfGenerator.new(post)
     pdf_generator.generate_pdf
     send_file "#{Rails.root}/public/#{post.title.parameterize}_post.pdf", type: 'application/pdf', disposition: 'attachment'
   end

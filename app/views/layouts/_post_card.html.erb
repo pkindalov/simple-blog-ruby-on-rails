@@ -41,7 +41,9 @@
 
       <p class="card-text">💾 <small class="text-muted">
         Download As PDF
-        <button class="btn btn-primary download-pdf-button" data-post-id="<%= post.id %>">Download PDF</button>
+        <button class="btn btn-primary download-pdf-button" data-post-id="<%= post.id %>" data-url="/posts/<%= post.id %>/download_pdf">Download
+          PDF
+        </button>
         <a href="#" class="btn disabled">👇 <%= post.downloaded_as_pdf || 0 %></a>
       </small></p>
 

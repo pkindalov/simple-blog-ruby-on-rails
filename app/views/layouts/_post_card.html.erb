@@ -34,8 +34,14 @@
       <p class="card-text">👁 <small class="text-muted">Viewed <%= post.views_count %> times</small></p>
       <p class="card-text">📷 <small class="text-muted">Photos <%= post.photos.count %></small></p>
       <p class="card-text">🗣 <small class="text-muted">Comments <%= post.comments.count || 0 %></small></p>
+      <!--      <p class="card-text">💾 <small class="text-muted">-->
+      <!--        Download As PDF-->
+      <!--        <a href="#" class="btn disabled">👇 <%#= post.downloaded_as_pdf || 0 %></a>-->
+      <!--      </small></p> -->
+
       <p class="card-text">💾 <small class="text-muted">
         Download As PDF
+        <button class="btn btn-primary download-pdf-button" data-post-id="<%= post.id %>">Download PDF</button>
         <a href="#" class="btn disabled">👇 <%= post.downloaded_as_pdf || 0 %></a>
       </small></p>
 

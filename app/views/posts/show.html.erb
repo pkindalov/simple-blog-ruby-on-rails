@@ -31,7 +31,13 @@
             </button>
           </div>
 
-          <%= link_to '💾 Download as PDF', download_pdf_post_path(@post), class: 'btn btn-primary mt-3 mb-3' %>
+          <%#= link_to '💾 Download as PDF', download_pdf_post_path(@post), class: 'btn btn-primary mt-3 mb-3' %>
+
+          <div class="mt-3 mb-3">
+            <button class="btn btn-primary download-pdf-button" data-post-id="<%= @post.id %>">Download PDF</button>
+            <a href="#" class="btn disabled">👇 <%= @post.downloaded_as_pdf || 0 %></a>
+          </div>
+
           <!-- Comments Section -->
           <section>
             <h3 class="mb-5">Comments:</h3>

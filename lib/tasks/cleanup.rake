@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # lib/tasks/cleanup.rake
 namespace :cleanup do
   desc 'Remove old PDF files'
@@ -15,5 +17,17 @@ namespace :cleanup do
     rescue StandardError => e
       puts "Failed to delete #{file_path}: #{e.message}"
     end
+    puts 'Done!'
+  end
+
+  task remove_pdf_files: :environment do
+    puts 'Starting to remove PDF files from public directory...'
+    Dir.glob(Rails.root.join('public', '*.pdf')).each do |file_path|
+      File.delete(file_path)
+      puts "Deleted: #{file_path}"
+    rescue StandardError => e
+      puts "Failed to delete #{file_path}: #{e.message}"
+    end
+    puts 'Done!'
   end
 end

@@ -30,6 +30,24 @@
     <div class="card-body">
       <h5 class="card-title mb-5">🔖 <%= post.title %></h5>
       <p class="card-text">📄 <%= post.description %></p>
+
+      <hr />
+      <div class="d-flex justify-content-start align-items-center flex-wrap mt-3 mb-3">
+        <span class="fw-bold me-1">👤 Author:</span>
+        <%= link_to post.user.email, user_profile_path(post.user), class: "text-decoration-none text-truncate", style: "max-width: 200px;" %>
+      </div>
+      <hr />
+
+      <!--      <p class="card-text d-flex align-items-center">-->
+      <!--        👤 Author-->
+      <%#= link_to post.user.email, user_profile_path(post.user), class: "ms-2 text-decoration-none" %>
+      <!--      </p>-->
+
+      <!--      <p class="card-text">📄 Author <%#= post.user.email %></p>-->
+      <!--      <p class="card-text">📄 Author <%#= link_to user_profile_path(post.user), class: "nav-link" do %>-->
+      <%#= post.user.email %>
+      <%# end %>
+      <!--      </p>-->
       <p class="card-text">📅 <small class="text-muted">Posted on <%= post.created_at.strftime("%d %B %Y") %></small></p>
       <p class="card-text">👁 <small class="text-muted">Viewed <%= post.views_count %> times</small></p>
       <p class="card-text">📷 <small class="text-muted">Photos <%= post.photos.count %></small></p>
@@ -39,13 +57,14 @@
       <!--        <a href="#" class="btn disabled">👇 <%#= post.downloaded_as_pdf || 0 %></a>-->
       <!--      </small></p> -->
 
-      <p class="card-text">💾 <small class="text-muted">
+      <p class="card-text mb-5">💾 <small class="text-muted">
         Download As PDF
         <button class="btn btn-primary download-pdf-button" data-post-id="<%= post.id %>" data-url="/posts/<%= post.id %>/download_pdf">Download
           PDF
         </button>
         <a href="#" class="btn disabled">👇 <%= post.downloaded_as_pdf || 0 %></a>
       </small></p>
+      <hr />
 
       <div class="btn-group" role="group" aria-label="Post Actions">
         <%= link_to '👀 Show', post_path(post), class: 'btn btn-info' %>

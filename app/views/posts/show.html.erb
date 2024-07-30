@@ -6,11 +6,18 @@
           <h4><%= @post.title %></h4>
         </div>
         <div class="card-body">
+
           <p>👁 <%= @post.views_count %> views</p>
           <p>📄 <%= @post.description %></p>
           <p>📅 Posted on <%= @post.post_date %></p>
           <p>👍 Likes : <%= @post.likes.count %></p>
           <p>🗣 Comments : <%= @total_comments_count %></p>
+          <hr />
+          <div class="d-flex justify-content-start align-items-center flex-wrap mt-3 mb-3">
+            <span class="fw-bold me-1">👤 Author:</span>
+            <%= link_to @post.user.email, user_profile_path(@post.user), class: "text-decoration-none text-truncate", style: "max-width: 200px;" %>
+          </div>
+          <hr />
 
           <!-- Bootstrap Carousel for Photos -->
           <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">

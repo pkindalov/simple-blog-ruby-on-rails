@@ -50,25 +50,30 @@
         <p>No posts found.</p>
       <% end %>
 
-      <% if @comments.any? %>
-        <h4>My Comments</h4>
-        <% @comments.each do |comment| %>
-          <div class="media mb-4">
-            <div class="media-body">
-              <h5 class="mt-0"><%= comment.user.email %>
-                on <%= link_to comment.post.title, post_path(comment.post) %></h5>
-              <p><%= comment.content %></p>
-              <%= link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-            </div>
-          </div>
-        <% end %>
 
-        <div class="text-center">
-          <%= will_paginate @comments, renderer: BootstrapPagination::Rails, param_name: 'comments_page' %>
-        </div>
-      <% else %>
-        <p>No comments found.</p>
+
+      <% if current_user.id == @user.id %>
+        <% if @comments.any? %>
+          <h4>My Comments</h4>
+          <% @comments.each do |comment| %>
+            <div class="media mb-4">
+              <div class="media-body">
+                <h5 class="mt-0"><%= comment.user.email %>
+                  on <%= link_to comment.post.title, post_path(comment.post) %></h5>
+                <p><%= comment.content %></p>
+                <%= link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="text-center">
+            <%= will_paginate @comments, renderer: BootstrapPagination::Rails, param_name: 'comments_page' %>
+          </div>
+        <% else %>
+          <p>No comments found.</p>
+        <% end %>
       <% end %>
+
     </div>
   </div>
 </div>

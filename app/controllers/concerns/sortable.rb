@@ -8,30 +8,46 @@ module Sortable
   private
 
   def load_sorted_posts
-    @sort_by = params[:sort_by] || 'recent'
+    @sort_by = params[:sort_by] || 'popular'
 
-    @posts = case @sort_by
-             when 'views'
-               Post.paginate(page: params[:page], per_page: 5).order(views_count: :desc)
-             when 'photos'
-               Post.left_joins(:photos_attachments).group('posts.id')
-                   .paginate(page: params[:page], per_page: 5)
-                   .order('COUNT(active_storage_attachments.record_id) DESC')
-                   .where(active_storage_attachments: { name: 'photos', record_type: 'Post' })
-             when 'likes'
-               Post.left_joins(:likes).group('posts.id')
-                   .paginate(page: params[:page], per_page: 5)
-                   .order('COUNT(likes.id) DESC')
-             when 'comments'
-               Post.left_joins(:comments).group('posts.id')
-                   .paginate(page: params[:page], per_page: 5)
-                   .order('COUNT(comments.id) DESC')
-             when 'author_asc'
-               Post.joins(:user).paginate(page: params[:page], per_page: 5).order(email: :asc)
-             when 'author_desc'
-               Post.joins(:user).paginate(page: params[:page], per_page: 5).order(email: :desc)
-             else # recent
-               Post.paginate(page: params[:page], per_page: 5).order(created_at: :desc)
-             end
+    @posts = Rails.cache.fetch("#{@sort_by}/posts/#{params[:page]}", expires_in: 10.minutes) do
+      case @sort_by
+      when 'popular'
+        Post.select("posts.*, (COALESCE(posts.views_count, 0) + COALESCE(posts.downloaded_as_pdf, 0) + COALESCE(COUNT(likes.id), 0) + COALESCE(COUNT(comments.id), 0)) AS popularity_score")
+            .left_joins(:likes, :comments)
+            .group('posts.id')
+            .order('popularity_score DESC')
+            .paginate(page: params[:page], per_page: 5)
+      when 'views'
+        Post.paginate(page: params[:page], per_page: 5).order(views_count: :desc)
+      when 'photos'
+        Post.left_joins(:photos_attachments)
+            .group('posts.id')
+            .paginate(page: params[:page], per_page: 5)
+            .order('COUNT(active_storage_attachments.record_id) DESC')
+            .where(active_storage_attachments: { name: 'photos', record_type: 'Post' })
+      when 'likes'
+        Post.left_joins(:likes)
+            .group('posts.id')
+            .paginate(page: params[:page], per_page: 5)
+            .order('COUNT(likes.id) DESC')
+      when 'comments'
+        Post.left_joins(:comments)
+            .group('posts.id')
+            .paginate(page: params[:page], per_page: 5)
+            .order('COUNT(comments.id) DESC')
+      when 'author_asc'
+        Post.joins(:user)
+            .paginate(page: params[:page], per_page: 5)
+            .order('users.email ASC')
+      when 'author_desc'
+        Post.joins(:user)
+            .paginate(page: params[:page], per_page: 5)
+            .order('users.email DESC')
+      else
+        Post.paginate(page: params[:page], per_page: 5).order(created_at: :desc)
+      end
+    end
   end
+
 end

@@ -92,6 +92,14 @@ class PostsController < ApplicationController
       # Ако условието е изпълнено, не правим нищо
     else
       post.increment!(:downloaded_as_pdf)
+      if current_user != post.user
+        NotificationService.notify(
+          recipient: post.user,
+          actor: current_user,
+          action: 'downloaded',
+          notifiable: post
+        )
+      end
       session[:last_downloaded] = post.id
       session[:last_downloaded_at] = Time.now
     end

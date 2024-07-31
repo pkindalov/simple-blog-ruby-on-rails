@@ -30,9 +30,13 @@ module NotificationsHelper
 
     action_description = case notification.action
                          when 'liked'
-                           "liked your #{notification.notifiable_type.downcase}"
+                           "👍 liked your #{notification.notifiable_type.downcase}"
                          when 'commented'
-                           "commented on your #{notification.notifiable_type.downcase}"
+                           "🗣 commented on your #{notification.notifiable_type.downcase}"
+                         when 'downloaded'
+                           "💾 downloaded your #{notification.notifiable_type.downcase}"
+                         when 'unliked'
+                           "👎 unliked your #{notification.notifiable_type.downcase}"
                          else
                            "made an action on your #{notification.notifiable_type.downcase}"
                          end

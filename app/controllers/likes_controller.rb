@@ -8,7 +8,7 @@ class LikesController < ApplicationController
     else
       like = @likeable.likes.create(user_id: current_user.id)
       if like.persisted? && current_user != @likeable.user
-        Notification.create(
+        NotificationService.notify(
           recipient: @likeable.user,
           actor: current_user,
           action: 'liked',
@@ -23,6 +23,12 @@ class LikesController < ApplicationController
     like = @likeable.likes.find_by(user_id: current_user.id)
     if like
       like.destroy
+      NotificationService.notify(
+        recipient: @likeable.user,
+        actor: current_user,
+        action: 'unliked',
+        notifiable: @likeable
+      )
       redirect_to request.referrer || root_path, notice: "Like removed."
     else
       redirect_to request.referrer || root_path, alert: "Like not found."

@@ -1,71 +1,4 @@
 <!-- _main_nav.html.erb -->
-<!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-<!--  <div class="container-fluid">-->
-<%#= link_to "Simple Blog", root_path, class: "navbar-brand" %>
-<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--      <span class="navbar-toggler-icon"></span>-->
-<!--    </button>-->
-<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--      <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
-<%# if user_signed_in? %>
-<!--          <li class="nav-item">-->
-<%#= link_to 'Create New Post', new_post_path, class: 'btn btn-primary' %>
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<%#= link_to 'Posts', posts_path, class: "nav-link" %>
-<!--          </li>-->
-<%# end %>
-<!--        <li class="nav-item">-->
-<%#= link_to 'About', about_path, class: "nav-link" %>
-<!--        </li>-->
-<!--        <li class="nav-item">-->
-<%#= link_to 'Services', services_path, class: "nav-link" %>
-<!--        </li>-->
-<!--        <li class="nav-item">-->
-<%#= link_to 'Contacts', contacts_path, class: "nav-link" %>
-<!--        </li>-->
-<!--      </ul>-->
-<!--      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">-->
-<%# if user_signed_in? %>
-<!--          <li class="nav-item dropdown">-->
-<!--            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-<%#= image_tag current_user.profile_photo ? current_user.profile_photo : 'default_image.png', class: "rounded-circle", size: "30x30", alt: "Profile Photo" %>
-<%#= current_user.email %>
-<!--              <span class="badge bg-primary">🔔 <%#= current_user.received_notifications.unread.count %></span>-->
-<!--            </a>-->
-<!--            <ul class="dropdown-menu dropdown-menu-end p-2" style="min-width: 300px;" aria-labelledby="navbarDropdown">-->
-<%# current_user.received_notifications.unread.limit(5).each do |notification| %>
-<!--                <li class="d-flex justify-content-between align-items-center text-truncate">-->
-<!--                  <a class="flex-grow-1 text-decoration-none" href="#">-->
-<%#= notification_action(notification) %>
-<!--                  </a>-->
-<!--                  <small class="text-muted"><%#= time_ago_in_words(notification.created_at) %> ago</small>-->
-<!--                </li>-->
-<%# end %>
-<!--              <li><hr class="dropdown-divider"></li>-->
-<!--              <li><%#= link_to 'See all', notifications_path, class: "dropdown-item text-decoration-none" %></li>-->
-<!--            </ul>-->
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<%#= link_to 'Logout', destroy_user_session_path, method: :delete, class: "nav-link" %>
-<!--          </li>-->
-<%# else %>
-<!--          <li class="nav-item">-->
-<%#= link_to 'Log In', new_user_session_path, class: "nav-link" %>
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<%#= link_to 'Sign Up', new_user_registration_path, class: "nav-link" %>
-<!--          </li>-->
-<%# end %>
-<!--      </ul>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</nav>-->
-
-
-
-
-<!-- _main_nav.html.erb -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <%= link_to "Simple Blog", root_path, class: "navbar-brand" %>
@@ -101,7 +34,7 @@
               <span class="badge bg-primary">🔔 <%= current_user.received_notifications.unread.count %></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end p-3" style="min-width: 350px;" aria-labelledby="navbarDropdown">
-              <% current_user.received_notifications.unread.limit(5).each do |notification| %>
+              <% current_user.received_notifications.unread.order(created_at: :desc).limit(5).each do |notification| %>
                 <li class="d-flex justify-content-between gap-3 align-items-center text-truncate px-2 py-2">
                   <span class="flex-grow-1 text-decoration-none">
                     <%= notification_action(notification) %>

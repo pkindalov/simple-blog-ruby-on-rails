@@ -19,6 +19,13 @@ Rails.application.routes.draw do
     resources :likes, only: [:create, :destroy]
   end
 
+  resources :notifications, only: [:index, :destroy] do
+    member do
+      post :mark_as_read
+    end
+  end
+
+
   delete 'posts/:id/photo/:photo_id', to: 'posts#delete_photo', as: 'delete_post_photo'
   delete 'users/:id/avatar', to: 'users#delete_avatar', as: 'delete_avatar'
 end

@@ -6,7 +6,15 @@ class LikesController < ApplicationController
     if already_liked?(current_user, @likeable)
       redirect_to request.referrer || root_path, alert: "You can't like more than once"
     else
-      @likeable.likes.create(user_id: current_user.id)
+      like = @likeable.likes.create(user_id: current_user.id)
+      if like.persisted? && current_user != @likeable.user
+        Notification.create(
+          recipient: @likeable.user,
+          actor: current_user,
+          action: 'liked',
+          notifiable: @likeable
+        )
+      end
       redirect_to request.referrer || root_path, notice: "Liked successfully!"
     end
   end

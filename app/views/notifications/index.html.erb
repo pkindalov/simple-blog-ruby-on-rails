@@ -1,3 +1,5 @@
+<%= javascript_include_tag "filterNotifications", "data-turbo-track": "reload", defer: true %>
+
 <!-- notifications/index.html.erb -->
 <h1 class="text-center mt-5 mb-5">Your Notifications 🔔</h1>
 <hr>
@@ -32,30 +34,3 @@
 <% else %>
   <p>You have no notifications.</p>
 <% end %>
-
-<script>
-    // JavaScript function to filter notifications based on the read status
-    function filterNotifications() {
-        const checkbox = document.getElementById('filterRead');
-        const notifications = document.querySelectorAll('.list-group-item');
-
-        notifications.forEach(notification => {
-            const notificationStatus = +notification.getAttribute('data-readed');
-            if(checkbox.checked && notificationStatus) {
-                notification.style.visibility = "hidden";
-            } else {
-                notification.style.visibility = "visible";
-            }
-            // console.log(item);
-            // console.log(item.getAttribute('data-readed') + ' - ' + typeof item.getAttribute('data-readed'));
-            // var status = item.querySelector('.badge').textContent.trim();
-            // if (checkbox.checked && status === 'Unread') {
-            //     item.style.display = 'none';
-            // } else {
-            //     item.style.display = 'flex';
-            // }
-        });
-    }
-
-    filterNotifications();
-</script>

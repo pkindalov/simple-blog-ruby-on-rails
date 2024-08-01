@@ -44,10 +44,14 @@
                   <%= link_to 'Delete', notification_path(notification), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger ms-1" %>
                 </li>
               <% end %>
-              <li>
-                <hr class="dropdown-divider">
+              <li><hr class="dropdown-divider"></li>
+              <li class="notifications-dropdown__menu-cont">
+                <%= link_to '👁 See all', notifications_path, class: "dropdown-item text-decoration-none notifications-dropdown__menu-item" %>
+                <% if current_user.received_notifications.unread.count > 0 %>
+                  <%= link_to '📖 Mark All Read', mark_all_as_read_notifications_path, method: :post, class: "dropdown-item text-decoration-none notifications-dropdown__menu-item" %>
+                  <%= link_to '❌ Delete All', delete_all_notifications_path, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger ms-auto notifications-dropdown__menu-item" %>
+              <% end %>
               </li>
-              <li><%= link_to 'See all', notifications_path, class: "dropdown-item text-decoration-none" %></li>
             </ul>
           </li>
           <li class="nav-item">
@@ -65,5 +69,3 @@
     </div>
   </div>
 </nav>
-
-

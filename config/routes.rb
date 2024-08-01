@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   root 'home#index'
   get 'about', to: 'home#about'
@@ -13,18 +15,21 @@ Rails.application.routes.draw do
     member do
       get 'download_pdf'
     end
-    resources :comments, only: [:create, :edit, :update, :destroy] do
-      resources :likes, only: [:create, :destroy]
+    resources :comments, only: %i[create edit update destroy] do
+      resources :likes, only: %i[create destroy]
     end
-    resources :likes, only: [:create, :destroy]
+    resources :likes, only: %i[create destroy]
   end
 
-  resources :notifications, only: [:index, :destroy] do
+  resources :notifications, only: %i[index destroy] do
     member do
       post :mark_as_read
     end
+    collection do
+      post :mark_all_as_read
+      delete :delete_all
+    end
   end
-
 
   delete 'posts/:id/photo/:photo_id', to: 'posts#delete_photo', as: 'delete_post_photo'
   delete 'users/:id/avatar', to: 'users#delete_avatar', as: 'delete_avatar'

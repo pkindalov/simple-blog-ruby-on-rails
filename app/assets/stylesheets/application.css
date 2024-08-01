@@ -14,3 +14,20 @@
  *= require_self
  */
 @import "application.bootstrap";
+
+а:link,
+a:visited {
+    text-decoration: none !important;
+}
+
+.notifications__filter-box {
+    padding-left: 1rem;
+}
+
+.notifications-dropdown__menu-cont {
+    display: flex;
+}
+
+.notifications-dropdown__menu-item {
+    flex: 1 1 10%;
+}

@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 class NotificationsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_notification, only: [:destroy, :mark_as_read]
 
   def index
-    @notifications = current_user.received_notifications.paginate(:page => params[:page], :per_page => 2).order('created_at DESC')
+    @notifications = current_user.received_notifications.paginate(page: params[:page],
+                                                                  per_page: 5).order('created_at DESC')
   end
 
   def destroy
@@ -19,6 +22,11 @@ class NotificationsController < ApplicationController
   def mark_all_as_read
     current_user.received_notifications.unread.update_all(read_at: Time.current)
     redirect_to notifications_path, notice: 'All notifications have been marked as read.'
+  end
+
+  def delete_all
+    current_user.received_notifications.unread.destroy_all
+    redirect_to notifications_path, notice: 'All notifications deleted.'
   end
 
   private

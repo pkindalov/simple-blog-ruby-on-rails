@@ -28,10 +28,10 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <% if user_signed_in? %>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" <%= current_user.received_notifications.unread.count == 0 ? 'disabled' : '' %>>
               <%= image_tag current_user.profile_photo ? current_user.profile_photo : 'default_image.png', class: "rounded-circle", size: "30x30", alt: "Profile Photo" %>
               <%= current_user.email %>
-              <span class="badge bg-primary">🔔 <%= current_user.received_notifications.unread.count %></span>
+              <span class="badge bg-<%= current_user.received_notifications.unread.count > 0 ? 'primary' : 'secondary'  %>">🔔 <%= current_user.received_notifications.unread.count %></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end p-3" style="min-width: 350px;" aria-labelledby="navbarDropdown">
               <% current_user.received_notifications.unread.order(created_at: :desc).limit(5).each do |notification| %>

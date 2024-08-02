@@ -6,4 +6,5 @@ class Notification < ApplicationRecord
 
   # Scope за непрочетени нотификации
   scope :unread, -> { where(read_at: nil) }
+  scope :readed, -> { where.not(read_at: nil) }
 end

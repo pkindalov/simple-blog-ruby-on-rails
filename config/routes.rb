@@ -24,9 +24,11 @@ Rails.application.routes.draw do
   resources :notifications, only: %i[index destroy] do
     member do
       post :mark_as_read
+      post :mark_as_unread
     end
     collection do
       post :mark_all_as_read
+      post :mark_all_as_unread
       delete :delete_all
     end
   end

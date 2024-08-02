@@ -23,10 +23,14 @@
         </div>
         <div class="d-flex align-items-center">
           <span class="badge bg-<%= notification.read_at ? 'success' : 'secondary' %> me-3">
-            <%= notification.read_at ? 'Read' : 'Unread' %>
+            <%= notification.read_at ? '📖 Read' : '✉ Unread' %>
           </span>
-          <%= link_to 'Read', mark_as_read_notification_path(notification), method: :post, class: "btn btn-sm btn-success me-1" %>
-          <%= link_to 'Delete', notification_path(notification), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+          <% if notification.read_at? %>
+            <%= link_to '✉ Unread', mark_as_unread_notification_path(notification), method: :post, class: "btn btn-sm btn-success me-1 notifications__action-btn" %>
+          <% else %>
+            <%= link_to '📖 Read', mark_as_read_notification_path(notification), method: :post, class: "btn btn-sm btn-success me-1 notifications__action-btn" %>
+          <% end %>
+          <%= link_to '❌ Delete', notification_path(notification), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
         </div>
       </li>
     <% end %>

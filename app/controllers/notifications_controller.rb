@@ -2,7 +2,7 @@
 
 class NotificationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_notification, only: [:destroy, :mark_as_read]
+  before_action :set_notification, only: [:destroy, :mark_as_read, :mark_as_unread]
 
   def index
     @notifications = current_user.received_notifications.paginate(page: params[:page],
@@ -19,9 +19,19 @@ class NotificationsController < ApplicationController
     redirect_to notifications_path, notice: 'Notification marked as read.'
   end
 
+  def mark_as_unread
+    @notification.update(read_at: nil)
+    redirect_to notifications_path, notice: 'Notification marked as unread.'
+  end
+
   def mark_all_as_read
     current_user.received_notifications.unread.update_all(read_at: Time.current)
     redirect_to notifications_path, notice: 'All notifications have been marked as read.'
+  end
+
+  def mark_all_as_unread
+    current_user.received_notifications.unread.update_all(read_at: nil)
+    redirect_to notifications_path, notice: 'All notifications have been marked as unread.'
   end
 
   def delete_all

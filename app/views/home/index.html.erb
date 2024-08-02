@@ -23,6 +23,19 @@
         <%= render "layouts/filter_posts" %>
         </div>
 
+        <% if @following_posts.any? %>
+          <h2>Posts from People You Follow</h2>
+          <div class="row">
+            <% @following_posts.each do |post| %>
+              <%= render "layouts/post_card", post: post %>
+            <% end %>
+          </div>
+
+          <div class="text-center">
+            <%= will_paginate @following_posts, renderer: BootstrapPagination::Rails %>
+          </div>
+        <% end %>
+
         <h2>Recent Posts</h2>
         <div class="row">
           <% @posts.each do |post| %>

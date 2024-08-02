@@ -2,11 +2,14 @@
 
 class NotificationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_notification, only: [:destroy, :mark_as_read, :mark_as_unread]
+  before_action :set_notification, only: %i[destroy mark_as_read mark_as_unread]
 
   def index
-    @notifications = current_user.received_notifications.paginate(page: params[:page],
-                                                                  per_page: 5).order('created_at DESC')
+    # @notifications = current_user.received_notifications.paginate(page: params[:page],
+    #                                                               per_page: 5).order('created_at DESC')
+    @notifications = current_user.received_notifications
+                                 .order(read_at: :asc, created_at: :desc)
+                                 .paginate(page: params[:page], per_page: 5)
   end
 
   def destroy

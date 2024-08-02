@@ -10,7 +10,8 @@
   <%= stylesheet_link_tag "paginate", media: 'all' %>
   <%= javascript_importmap_tags %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true, type: "module" %>
-  <%#= javascript_include_tag "filterPosts", "data-turbo-track": "reload", defer: true %>
+  <%= javascript_include_tag 'download_pdf', "data-turbo-track": "reload", defer: true %>
+  <%= javascript_include_tag 'notifications', "data-turbo-track": "reload", defer: true %>
 
 </head>
 
@@ -21,6 +22,14 @@
 <% end %>
 <% if alert %> <p class="alert alert-danger"><%= alert %></p>
 <% end %>
+
+<!--<div class="flash">-->
+  <%# flash.each do |type, message| %>
+<!--    <p class="flash <%#= type %>"><%#= message %></p>-->
+  <%# end %>
+<!--</div>-->
+
+
 <%= yield %>
 </body>
 </html>

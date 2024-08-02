@@ -11,6 +11,19 @@
         <div class="card-body text-center">
           <h5 class="card-title">User profile</h5>
           <p class="card-text"><%= @user.email %></p>
+
+          <% if current_user.id != @user.id %>
+
+            <% if current_user.following?(@user) %>
+              <p class="card-text">
+                <%= button_to 'Unfollow', unfollow_user_path(@user), method: :delete, params: { id: @user.id } %>
+            <% else %>
+              <%= button_to 'Follow', follow_user_path(@user), method: :post, params: { id: @user.id } %>
+              </p>
+            <% end %>
+
+          <% end %>
+
         </div>
         <!--        <div class="card-footer">-->
         <!--          <div class="d-flex justify-content-between align-items-center mb-3">-->
@@ -22,7 +35,9 @@
 
         <div class="card-footer">
           <div class="d-flex justify-content-around align-items-center mb-3">
-            <%= link_to '🖊 Edit', edit_user_registration_path, class: 'btn btn-primary' %>
+            <% if current_user.id == @user.id %>
+              <%= link_to '🖊 Edit', edit_user_registration_path, class: 'btn btn-primary' %>
+            <% end %>
             <%#= link_to '💾 Download Posts', download_user_posts_path(@user), class: 'btn btn-secondary' %>
             <button class="btn btn-secondary download-pdf-button" data-post-id="<%= @user.id %>" data-url="/users/<%= @user.id %>/download_posts">💾
               Download Posts
@@ -72,6 +87,8 @@
         <% else %>
           <p>No comments found.</p>
         <% end %>
+
+
       <% end %>
 
     </div>

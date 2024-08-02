@@ -28,10 +28,10 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <% if user_signed_in? %>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" <%= current_user.received_notifications.unread.count == 0 ? 'disabled' : '' %>>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <%= image_tag current_user.profile_photo ? current_user.profile_photo : 'default_image.png', class: "rounded-circle", size: "30x30", alt: "Profile Photo" %>
               <%= current_user.email %>
-              <span class="badge bg-<%= current_user.received_notifications.unread.count > 0 ? 'primary' : 'secondary'  %>">🔔 <%= current_user.received_notifications.unread.count %></span>
+                <span class="badge bg-<%= current_user.received_notifications.unread.count > 0 ? 'primary' : 'secondary' %>">🔔 <%= current_user.received_notifications.unread.count %></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end p-3" style="min-width: 350px;" aria-labelledby="navbarDropdown">
               <% current_user.received_notifications.unread.order(created_at: :desc).limit(5).each do |notification| %>
@@ -44,13 +44,15 @@
                   <%= link_to '❌ Delete', notification_path(notification), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger ms-1" %>
                 </li>
               <% end %>
-              <li><hr class="dropdown-divider"></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
               <li class="notifications-dropdown__menu-cont">
                 <%= link_to '👁 See all', notifications_path, class: "dropdown-item text-decoration-none notifications-dropdown__menu-item" %>
                 <% if current_user.received_notifications.unread.count > 0 %>
                   <%= link_to '📖 Mark All Read', mark_all_as_read_notifications_path, method: :post, class: "dropdown-item text-decoration-none notifications-dropdown__menu-item" %>
                   <%= link_to '❌ Delete All', delete_all_notifications_path, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger ms-auto notifications-dropdown__menu-item" %>
-              <% end %>
+                <% end %>
               </li>
             </ul>
           </li>

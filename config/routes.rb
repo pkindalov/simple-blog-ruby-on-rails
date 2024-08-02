@@ -9,7 +9,12 @@ Rails.application.routes.draw do
   get 'users/:id/download_posts', to: 'users#download_posts_pdf', as: 'download_user_posts'
 
   devise_for :users
-  resources :users, only: [:show]
+  resources :users, only: [:show] do
+    member do
+      post 'follow', to: 'follows#create'
+      delete 'unfollow', to: 'follows#destroy'
+    end
+  end
 
   resources :posts do
     member do

@@ -36,6 +36,10 @@
     <% end %>
   </ul>
 
+  <div class="text-center">
+    <%= will_paginate @notifications, renderer: BootstrapPagination::Rails %>
+  </div>
+
   <div class="mt-5">
     <%= link_to '📖 Mark All Readed', mark_all_as_read_notifications_path, method: :post, class: "btn btn-sm btn-secondary me-1" %>
     <%= link_to '✉ Mark All Unread', mark_all_as_unread_notifications_path, method: :post, class: "btn btn-sm btn-success me-1" %>

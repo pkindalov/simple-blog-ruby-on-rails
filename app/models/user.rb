@@ -38,7 +38,9 @@ class User < ApplicationRecord
 
   # Метод за спиране на следване
   def unfollow(other_user)
-    active_follows.find_by(followed_id: other_user.id).destroy if following?(other_user)
+    follow = active_follows.find_by(followed_id: other_user.id)
+    follow.destroy
+    follow # Връща Follow обекта преди унищожаването
   end
 
   # Проверка дали следва даден потребител

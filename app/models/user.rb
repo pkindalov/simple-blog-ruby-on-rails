@@ -5,9 +5,9 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :liked_posts, through: :likes, source: :post
   has_many :comments, dependent: :destroy
-  # users to received notifications
+  # Users to receive notifications
   has_many :received_notifications, class_name: 'Notification', foreign_key: 'recipient_id'
-  # permit users to generate notifications
+  # Permit users to generate notifications
   has_many :sent_notifications, class_name: 'Notification', foreign_key: 'actor_id'
 
   # Следващи потребители
@@ -17,6 +17,12 @@ class User < ApplicationRecord
   # Последователи
   has_many :passive_follows, class_name: 'Follow', foreign_key: 'followed_id', dependent: :destroy
   has_many :followers, through: :passive_follows, source: :follower
+
+  has_many :active_blocks, class_name: 'Block', foreign_key: 'blocker_id', dependent: :destroy
+  has_many :blocked_users, through: :active_blocks, source: :blocked
+
+  has_many :passive_blocks, class_name: 'Block', foreign_key: 'blocked_id', dependent: :destroy
+  has_many :blockers, through: :passive_blocks, source: :blocker
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -39,13 +45,31 @@ class User < ApplicationRecord
   # Метод за спиране на следване
   def unfollow(other_user)
     follow = active_follows.find_by(followed_id: other_user.id)
-    follow.destroy
+    follow&.destroy
     follow # Връща Follow обекта преди унищожаването
   end
 
   # Проверка дали следва даден потребител
   def following?(other_user)
     following.include?(other_user)
+  end
+
+  # Метод за блокиране на потребител
+  def block(other_user)
+    transaction do
+      active_blocks.create!(blocked_id: other_user.id) unless blocking?(other_user)
+      unfollow(other_user) if following?(other_user) # Unfollow, ако следва този потребител
+    end
+  end
+
+  # Метод за деблокиране на потребител
+  def unblock(other_user)
+    active_blocks.find_by(blocked_id: other_user.id)&.destroy
+  end
+
+  # Проверка дали блокира даден потребител
+  def blocking?(other_user)
+    blocked_users.include?(other_user)
   end
 
   def popularity_score

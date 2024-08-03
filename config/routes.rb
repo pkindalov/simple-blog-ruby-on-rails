@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       delete 'unfollow', to: 'follows#destroy'
       get :followers
       get :following
+      post :block, to: 'blocks#create'
+      delete :unblock, to: 'blocks#destroy'
     end
     collection do
       get :popular

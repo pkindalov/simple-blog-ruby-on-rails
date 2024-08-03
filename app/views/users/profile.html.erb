@@ -1,30 +1,17 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-4">
-      <div class="card">
+      <div class="card shadow-sm">
         <% if @user.avatar.attached? %>
-          <%= image_tag url_for(@user.avatar), class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
+          <%= image_tag url_for(@user.avatar), class: 'card-img-top', style: 'height: 250px; object-fit: cover;' %>
         <% else %>
-          <%= image_tag 'default_image.png', class: 'card-img-top mb-3', style: 'max-height: 200px;' %>
+          <%= image_tag 'default_image.png', class: 'card-img-top', style: 'height: 250px; object-fit: cover;' %>
         <% end %>
 
         <div class="card-body text-center">
-          <h5 class="card-title">User Profile</h5>
-          <p class="card-text"><%= @user.email %></p>
+          <h5 class="card-title mb-3"><%= @user.email %></h5>
 
-          <% if current_user.id != @user.id %>
-            <% if current_user.following?(@user) %>
-              <p class="card-text">
-                <%= button_to 'Unfollow', unfollow_user_path(@user), method: :delete, params: { id: @user.id }, class: 'btn btn-outline-danger' %>
-              </p>
-            <% else %>
-              <p class="card-text">
-                <%= button_to 'Follow', follow_user_path(@user), method: :post, params: { id: @user.id }, class: 'btn btn-outline-primary' %>
-              </p>
-            <% end %>
-          <% end %>
-
-          <p class="card-text">
+          <p class="card-text mb-4">
             <span class="badge bg-secondary">
               <%= link_to "Followers: #{@user.followers.count}", followers_user_path(@user), class: 'text-white text-decoration-none' %>
             </span>
@@ -32,53 +19,70 @@
               <%= link_to "Following: #{@user.following.count}", following_user_path(@user), class: 'text-white text-decoration-none' %>
             </span>
           </p>
+
+          <% if current_user.id != @user.id %>
+            <div class="d-flex justify-content-center mb-3">
+              <% if current_user.following?(@user) %>
+                <%= button_to 'Unfollow', unfollow_user_path(@user), method: :delete, params: { id: @user.id }, class: 'btn btn-outline-danger mx-1' %>
+              <% else %>
+                <%= button_to 'Follow', follow_user_path(@user), method: :post, params: { id: @user.id }, class: 'btn btn-outline-primary mx-1' %>
+              <% end %>
+
+              <% if current_user.blocking?(@user) %>
+                <%= button_to 'Unblock', unblock_user_path(@user), method: :delete, class: 'btn btn-warning mx-1' %>
+              <% else %>
+                <%= button_to 'Block', block_user_path(@user), method: :post, class: 'btn btn-danger mx-1' %>
+              <% end %>
+            </div>
+          <% end %>
         </div>
 
         <div class="card-footer">
-          <div class="d-flex justify-content-around align-items-center mb-3">
+          <div class="d-flex justify-content-around">
             <% if current_user.id == @user.id %>
-              <%= link_to '🖊 Edit', edit_user_registration_path, class: 'btn btn-primary' %>
+              <%= link_to '🖊 Edit', edit_user_registration_path, class: 'btn btn-outline-primary btn-sm' %>
             <% end %>
-            <button class="btn btn-secondary download-pdf-button" data-post-id="<%= @user.id %>" data-url="/users/<%= @user.id %>/download_posts">💾 Download Posts</button>
-            <%= link_to '❌ Delete Avatar', delete_avatar_path(@user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+            <button class="btn btn-outline-secondary btn-sm download-pdf-button" data-post-id="<%= @user.id %>" data-url="/users/<%= @user.id %>/download_posts">💾 Download Posts</button>
+            <%= link_to '❌ Delete Avatar', delete_avatar_path(@user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
           </div>
         </div>
       </div>
     </div>
+
     <div class="col-md-8">
       <% if @posts.any? %>
-        <h4>My Posts</h4>
+        <h4 class="mb-4">My Posts</h4>
         <div class="row">
           <% @posts.each do |post| %>
             <%= render "layouts/post_card", post: post %>
           <% end %>
         </div>
 
-        <div class="text-center">
+        <div class="text-center mt-4">
           <%= will_paginate @posts, renderer: BootstrapPagination::Rails, param_name: 'page' %>
         </div>
       <% else %>
-        <p>No posts found.</p>
+        <p class="text-muted">No posts found.</p>
       <% end %>
 
       <% if current_user.id == @user.id %>
         <% if @comments.any? %>
-          <h4>My Comments</h4>
+          <h4 class="mb-4">My Comments</h4>
           <% @comments.each do |comment| %>
-            <div class="media mb-4">
+            <div class="media mb-4 border-bottom pb-3">
               <div class="media-body">
                 <h5 class="mt-0"><%= comment.user.email %> on <%= link_to comment.post.title, post_path(comment.post) %></h5>
                 <p><%= comment.content %></p>
-                <%= link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+                <%= link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
               </div>
             </div>
           <% end %>
 
-          <div class="text-center">
+          <div class="text-center mt-4">
             <%= will_paginate @comments, renderer: BootstrapPagination::Rails, param_name: 'comments_page' %>
           </div>
         <% else %>
-          <p>No comments found.</p>
+          <p class="text-muted">No comments found.</p>
         <% end %>
       <% end %>
     </div>

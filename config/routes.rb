@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'contacts', to: 'home#contacts'
   get 'users/:id/profile', to: 'users#profile', as: 'user_profile'
   get 'users/:id/download_posts', to: 'users#download_posts_pdf', as: 'download_user_posts'
+  get 'users/list', to: 'users#list', as: 'users_list'
 
   devise_for :users
   resources :users, only: [:show] do
@@ -15,6 +16,9 @@ Rails.application.routes.draw do
       delete 'unfollow', to: 'follows#destroy'
       get :followers
       get :following
+    end
+    collection do
+      get :popular
     end
   end
 

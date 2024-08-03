@@ -14,6 +14,16 @@
           <li class="nav-item">
             <%= link_to 'Posts', posts_path, class: "nav-link" %>
           </li>
+          <!-- Dropdown меню за потребители -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Users
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+              <li><%= link_to 'Popular Users', popular_users_path, class: "dropdown-item" %></li>
+              <li><%= link_to 'All Users', users_list_path, class: "dropdown-item" %></li>
+            </ul>
+          </li>
         <% end %>
         <li class="nav-item">
           <%= link_to 'About', about_path, class: "nav-link" %>

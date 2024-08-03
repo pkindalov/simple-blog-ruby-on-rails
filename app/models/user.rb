@@ -47,4 +47,19 @@ class User < ApplicationRecord
   def following?(other_user)
     following.include?(other_user)
   end
+
+  def popularity_score
+    # Изчисляване на броя харесвания за всички постове на потребителя
+    likes_count = posts.joins("LEFT JOIN likes ON likes.likeable_id = posts.id AND likes.likeable_type = 'Post'")
+                       .count("likes.id")
+
+    # Изчисляване на броя коментари за всички постове на потребителя
+    comments_count = posts.joins(:comments).count("comments.id")
+
+    # Изчисляване на общия брой гледания и сваляния на PDF
+    views_and_downloads = posts.sum("views_count + downloaded_as_pdf")
+
+    # Изчисляване на общата популярност
+    (3 * likes_count) + (2 * comments_count) + views_and_downloads
+  end
 end

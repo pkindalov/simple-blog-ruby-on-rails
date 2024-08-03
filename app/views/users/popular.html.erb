@@ -1,0 +1,42 @@
+<!-- app/views/users/popular.html.erb -->
+
+<div class="container mt-5 mb-5">
+  <h3>Top 10 Popular Users</h3>
+  <div class="row">
+    <% @popular_users.each do |user| %>
+      <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm">
+          <% if user.avatar.attached? %>
+            <%= image_tag url_for(user.avatar), class: 'card-img-top', style: 'max-height: 200px; object-fit: cover;' %>
+          <% else %>
+            <%= image_tag 'default_image.png', class: 'card-img-top', style: 'max-height: 200px; object-fit: cover;' %>
+          <% end %>
+          <div class="card-body text-center">
+            <h5 class="card-title">
+              <%= link_to user.email, user_profile_path(user), class: 'text-decoration-none' %>
+            </h5>
+            <p class="card-text">
+              <span class="badge bg-success">Popularity Score: <%= user.popularity_score %></span>
+            </p>
+            <p class="card-text">
+              <%= link_to "Posts: #{user.posts.count}", user_profile_path(user, anchor: 'posts'), class: 'text-decoration-none' %>
+              |
+              <%= link_to "Followers: #{user.followers.count}", followers_user_path(user), class: 'text-decoration-none' %>
+            </p>
+
+            <% if current_user.id != user.id %>
+              <% if current_user.following?(user) %>
+                <%= button_to 'Unfollow', unfollow_user_path(user), method: :delete, class: 'btn btn-outline-danger btn-sm' %>
+              <% else %>
+                <%= button_to 'Follow', follow_user_path(user), method: :post, class: 'btn btn-outline-primary btn-sm' %>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="card-footer text-center">
+            <%= link_to 'View Profile', user_profile_path(user), class: 'btn btn-sm btn-info' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

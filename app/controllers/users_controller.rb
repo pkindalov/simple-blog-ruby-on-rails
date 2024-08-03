@@ -61,6 +61,14 @@ class UsersController < ApplicationController
     @following = @user.following.paginate(page: params[:page], per_page: 10)
   end
 
+  def popular
+    @popular_users = User.all.sort_by { |user| -user.popularity_score }.first(10) # Взема първите 10 най-популярни потребители
+  end
+
+  def list
+    @users = User.all.paginate(page: params[:page], per_page: 10)
+  end
+
   private
 
   def set_user

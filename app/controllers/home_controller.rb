@@ -2,9 +2,8 @@
 
 class HomeController < ApplicationController
   include Sortable
-  def index
 
-  end
+  def index; end
 
   def about; end
 

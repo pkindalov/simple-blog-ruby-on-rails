@@ -5,6 +5,9 @@ document.addEventListener('turbo:load', () => {
     ];
 
     allNotifications.length > 0 && allNotifications.forEach((notification) => {
+        notification.addEventListener("click", (event) => {
+            notification.style.display = "none";
+        })
         setTimeout(function () {
             notification.style.display = "none";
         }, 1500)

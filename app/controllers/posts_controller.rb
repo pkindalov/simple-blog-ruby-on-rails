@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-# require 'pp'
 
 class PostsController < ApplicationController
   include Sortable
   before_action :authenticate_user!
   before_action :set_post, only: %i[edit update destroy]
+  before_action :check_blocked, only: %i[show download_pdf]
 
   def edit
     # Не е необходимо да вземаш поста, защото го вземаме в before_action
@@ -13,7 +13,7 @@ class PostsController < ApplicationController
   def show
     @post = Post.find(params[:id])
     @post.increment!(:views_count)
-    @comments = @post.comments.includes(:user).paginate(:page => params[:page], :per_page => 10).order('created_at DESC')
+    @comments = @post.comments.includes(:user).paginate(page: params[:page], per_page: 10).order('created_at DESC')
     @total_comments_count = @post.comments.count
     @comment = Comment.new
   rescue ActiveRecord::RecordNotFound
@@ -21,15 +21,11 @@ class PostsController < ApplicationController
   end
 
   def index
-    # @posts = Post.paginate(:page => params[:page], :per_page => 3).order('created_at DESC')
+    # Постовете се зареждат чрез модула Sortable
   end
 
   def create
     @post = current_user.posts.build(post_params) # Създаваме поста за текущия потребител
-    # @post.photo.attach(params[:post][:photo]) if params[:post][:photo]
-
-    # Rails.logger.debug "Post Params: #{post_params.inspect}"
-    # Rails.logger.debug "Photo Param: #{params[:post][:photo].inspect}"
 
     @post.photo.attach(params[:post][:photo]) if params[:post][:photo].present?
 
@@ -41,13 +37,9 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = Post.find(params[:id])
-
     if @post.update(post_params)
-      puts 'Post updated successfully'
       redirect_to @post, notice: 'Post was successfully updated.'
     else
-      puts 'Failed to update post'
       render :edit, alert: 'Post update failed.'
     end
   end
@@ -74,20 +66,10 @@ class PostsController < ApplicationController
     end
   end
 
-  # def download_pdf
-  #   Rails.application.routes.default_url_options[:host] = request.base_url
-  #   post = Post.find(params[:id])
-  #   post.increment!(:downloaded_as_pdf)
-  #   pdf_generator = PostPdfGenerator.new(post) # Предполагам, че имаш подобен клас за един пост
-  #   pdf_generator.generate_pdf
-  #   send_file "#{Rails.root}/public/#{post.title.parameterize}_post.pdf", type: 'application/pdf', disposition: 'attachment'
-  # end
-
   def download_pdf
     Rails.application.routes.default_url_options[:host] = request.base_url
     post = Post.find(params[:id])
 
-    # Блокиране на повторно изпълнение на увеличаване, ако това вече е направено в рамките на последните секунди
     if session[:last_downloaded].present? && session[:last_downloaded] == post.id && session[:last_downloaded_at].present? && Time.now - session[:last_downloaded_at].to_time < 5
       # Ако условието е изпълнено, не правим нищо
     else
@@ -104,7 +86,6 @@ class PostsController < ApplicationController
       session[:last_downloaded_at] = Time.now
     end
 
-
     pdf_generator = PostPdfGenerator.new(post)
     pdf_generator.generate_pdf
     send_file "#{Rails.root}/public/#{post.title.parameterize}_post.pdf", type: 'application/pdf', disposition: 'attachment'
@@ -120,5 +101,12 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:title, :description, :post_date, photos: [])
+  end
+
+  def check_blocked
+    @post = Post.find(params[:id])
+    if current_user.blocking?(@post.user) || @post.user.blocking?(current_user)
+      redirect_to root_path, alert: 'You cannot interact with posts from this user.'
+    end
   end
 end

@@ -1,6 +1,9 @@
+# frozen_string_literal: true
 # app/controllers/follows_controller.rb
 class FollowsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_user
+  before_action :check_blocked, only: %i[create destroy]
 
   def create
     follow = current_user.follow(@user) # Създава следване
@@ -36,5 +39,11 @@ class FollowsController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def check_blocked
+    if current_user.blocking?(@user) || @user.blocking?(current_user)
+      redirect_to user_profile_path(@user), alert: 'You cannot follow or unfollow this user.'
+    end
   end
 end

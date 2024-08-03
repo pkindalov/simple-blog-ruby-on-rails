@@ -1,30 +1,27 @@
 # frozen_string_literal: true
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:show, :profile, :settings, :update, :delete_avatar]
-  before_action :set_user, only: [:show, :profile, :settings, :update, :delete_avatar]
+  before_action :authenticate_user!, except: [:list, :popular] # Позволете неавтентифицирани потребители да виждат популярни и списъци
+  before_action :set_user, only: [:show, :profile, :settings, :update, :delete_avatar, :followers, :following]
+  before_action :check_blocked, except: [:list, :popular, :profile] # Позволете достъп до profile, дори когато сте блокирани
 
   def show
     # set_user вече задава @user
   end
 
   def profile
-    @posts = @user.posts.paginate(page: params[:page], per_page: 10)
-    @comments = @user.comments.paginate(page: params[:comments_page], per_page: 10)
-    # @posts = @user.posts.paginate(page: params[:page], per_page: 5)
+    if current_user.blocking?(@user) || @user.blocking?(current_user)
+      # Ако сте блокирани, скрийте съдържанието и покажете само бутоните за (от)блокиране
+      @posts = []
+      @comments = []
+    else
+      @posts = @user.posts.paginate(page: params[:page], per_page: 10)
+      @comments = @user.comments.paginate(page: params[:comments_page], per_page: 10)
+    end
   end
 
   def settings
     # settings view-то използва settings.html.erb
   end
-
-  # def update
-  # respond_to do |format|
-  #   if @user.update(user_params)
-  #     format.html { redirect_to @user, notice: 'User was successfully updated.' }
-  #     format.json { render :show, status: :ok, location: @user }
-  #   end
-  # end
-  # end
 
   def update
     respond_to do |format|
@@ -52,12 +49,10 @@ class UsersController < ApplicationController
   end
 
   def followers
-    @user = User.find(params[:id])
     @followers = @user.followers.paginate(page: params[:page], per_page: 10)
   end
 
   def following
-    @user = User.find(params[:id])
     @following = @user.following.paginate(page: params[:page], per_page: 10)
   end
 
@@ -74,12 +69,19 @@ class UsersController < ApplicationController
   def set_user
     @user = User.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    # redirect_to controller: 'home', action: 'index'
     redirect_to root_path, alert: 'User not found.'
-    # return
   end
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :avatar)
+  end
+
+  def check_blocked
+    return unless @user && current_user # Уверете се, че @user и current_user са зададени
+
+    # Пренасочване само ако не сме на страницата profile
+    if action_name != 'profile' && (current_user.blocking?(@user) || @user.blocking?(current_user))
+      redirect_to root_path, alert: 'You cannot interact with this user.'
+    end
   end
 end

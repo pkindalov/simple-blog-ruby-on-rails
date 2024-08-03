@@ -6,6 +6,7 @@ class NotificationsController < ApplicationController
 
   def index
     @notifications = current_user.received_notifications
+                                 .where.not(actor_id: current_user.blocked_users.pluck(:id)) # Не показва известия от блокирани потребители
                                  .order(read_at: :asc, created_at: :desc)
                                  .paginate(page: params[:page], per_page: 5)
   end
@@ -31,8 +32,6 @@ class NotificationsController < ApplicationController
   end
 
   def mark_all_as_unread
-    # unread_notifications = current_user.received_notifications.readed
-    # puts "Found #{unread_notifications.count} unread notifications"
     current_user.received_notifications.readed.update_all(read_at: nil)
     redirect_to notifications_path, notice: 'All notifications have been marked as unread.'
   end

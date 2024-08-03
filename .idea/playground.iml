@@ -416,7 +416,10 @@
           </RakeTaskImpl>
           <RakeTaskImpl id="cleanup">
             <subtasks>
-              <RakeTaskImpl description="Remove old PDF files" fullCommand="cleanup:remove_old_pdfs" id="remove_old_pdfs" />
+              <RakeTaskImpl description="Remove all notifications right now" fullCommand="cleanup:remove_all_notifications_now" id="remove_all_notifications_now" />
+              <RakeTaskImpl description="Remove pdf files right now" fullCommand="cleanup:remove_all_pdfs_now" id="remove_all_pdfs_now" />
+              <RakeTaskImpl description="Remove all old notifications after 24" fullCommand="cleanup:remove_old_notifications" id="remove_old_notifications" />
+              <RakeTaskImpl description="Remove old PDF files after 24 hours" fullCommand="cleanup:remove_old_pdfs" id="remove_old_pdfs" />
             </subtasks>
           </RakeTaskImpl>
           <RakeTaskImpl id="db">

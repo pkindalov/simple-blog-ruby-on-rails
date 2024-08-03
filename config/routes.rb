@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     member do
       post 'follow', to: 'follows#create'
       delete 'unfollow', to: 'follows#destroy'
+      get :followers
+      get :following
     end
   end
 

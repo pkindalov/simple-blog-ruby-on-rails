@@ -1,0 +1,25 @@
+<!-- app/views/users/following.html.erb -->
+
+<div class="container mt-5">
+  <h3>People <%= @user.email %> is Following</h3>
+  <% if @following.any? %>
+    <ul class="list-group">
+      <% @following.each do |followed| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <%= link_to followed.email, user_profile_path(followed) %>
+          <!-- Извличане на времето на следване -->
+          <% follow_record = Follow.find_by(follower: @user, followed: followed) %>
+          <% if follow_record %>
+            <span class="badge bg-secondary">Following since <%= time_ago_in_words(follow_record.created_at) %> ago</span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+
+    <div class="text-center mt-4">
+      <%= will_paginate @following, renderer: BootstrapPagination::Rails, param_name: 'page' %>
+    </div>
+  <% else %>
+    <p>No following found.</p>
+  <% end %>
+</div>

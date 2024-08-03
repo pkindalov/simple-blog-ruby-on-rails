@@ -51,6 +51,16 @@ class UsersController < ApplicationController
     send_file "#{Rails.root}/public/#{user.email}_posts.pdf", type: 'application/pdf', disposition: 'attachment'
   end
 
+  def followers
+    @user = User.find(params[:id])
+    @followers = @user.followers.paginate(page: params[:page], per_page: 10)
+  end
+
+  def following
+    @user = User.find(params[:id])
+    @following = @user.following.paginate(page: params[:page], per_page: 10)
+  end
+
   private
 
   def set_user

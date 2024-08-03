@@ -9,44 +9,40 @@
         <% end %>
 
         <div class="card-body text-center">
-          <h5 class="card-title">User profile</h5>
+          <h5 class="card-title">User Profile</h5>
           <p class="card-text"><%= @user.email %></p>
 
           <% if current_user.id != @user.id %>
-
             <% if current_user.following?(@user) %>
               <p class="card-text">
-                <%= button_to 'Unfollow', unfollow_user_path(@user), method: :delete, params: { id: @user.id } %>
+                <%= button_to 'Unfollow', unfollow_user_path(@user), method: :delete, params: { id: @user.id }, class: 'btn btn-outline-danger' %>
+              </p>
             <% else %>
-              <%= button_to 'Follow', follow_user_path(@user), method: :post, params: { id: @user.id } %>
+              <p class="card-text">
+                <%= button_to 'Follow', follow_user_path(@user), method: :post, params: { id: @user.id }, class: 'btn btn-outline-primary' %>
               </p>
             <% end %>
-
           <% end %>
 
+          <p class="card-text">
+            <span class="badge bg-secondary">
+              <%= link_to "Followers: #{@user.followers.count}", followers_user_path(@user), class: 'text-white text-decoration-none' %>
+            </span>
+            <span class="badge bg-secondary">
+              <%= link_to "Following: #{@user.following.count}", following_user_path(@user), class: 'text-white text-decoration-none' %>
+            </span>
+          </p>
         </div>
-        <!--        <div class="card-footer">-->
-        <!--          <div class="d-flex justify-content-between align-items-center mb-3">-->
-        <%#= link_to 'Edit Profile', edit_user_registration_path, class: 'btn btn-primary btn-block mb-3' %>
-        <%#= link_to 'Download Posts PDF', download_user_posts_path(@user), class: 'btn btn-info' %>
-        <%#= link_to 'Delete Avatar', delete_avatar_path(@user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-        <!--          </div>-->
-        <!--        </div>-->
 
         <div class="card-footer">
           <div class="d-flex justify-content-around align-items-center mb-3">
             <% if current_user.id == @user.id %>
               <%= link_to '🖊 Edit', edit_user_registration_path, class: 'btn btn-primary' %>
             <% end %>
-            <%#= link_to '💾 Download Posts', download_user_posts_path(@user), class: 'btn btn-secondary' %>
-            <button class="btn btn-secondary download-pdf-button" data-post-id="<%= @user.id %>" data-url="/users/<%= @user.id %>/download_posts">💾
-              Download Posts
-            </button>
+            <button class="btn btn-secondary download-pdf-button" data-post-id="<%= @user.id %>" data-url="/users/<%= @user.id %>/download_posts">💾 Download Posts</button>
             <%= link_to '❌ Delete Avatar', delete_avatar_path(@user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
           </div>
         </div>
-
-
       </div>
     </div>
     <div class="col-md-8">
@@ -65,16 +61,13 @@
         <p>No posts found.</p>
       <% end %>
 
-
-
       <% if current_user.id == @user.id %>
         <% if @comments.any? %>
           <h4>My Comments</h4>
           <% @comments.each do |comment| %>
             <div class="media mb-4">
               <div class="media-body">
-                <h5 class="mt-0"><%= comment.user.email %>
-                  on <%= link_to comment.post.title, post_path(comment.post) %></h5>
+                <h5 class="mt-0"><%= comment.user.email %> on <%= link_to comment.post.title, post_path(comment.post) %></h5>
                 <p><%= comment.content %></p>
                 <%= link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
               </div>
@@ -87,10 +80,7 @@
         <% else %>
           <p>No comments found.</p>
         <% end %>
-
-
       <% end %>
-
     </div>
   </div>
 </div>

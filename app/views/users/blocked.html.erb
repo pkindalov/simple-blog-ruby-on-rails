@@ -1,0 +1,29 @@
+<!-- app/views/users/blocked.html.erb -->
+
+<div class="container mt-5">
+  <h3>Blocked Users</h3>
+  <div class="row">
+    <% @blocked_users.each do |user| %>
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <% if user.avatar.attached? %>
+            <%= image_tag url_for(user.avatar), class: 'card-img-top', style: 'height: 150px; object-fit: cover;' %>
+          <% else %>
+            <%= image_tag 'default_image.png', class: 'card-img-top', style: 'height: 150px; object-fit: cover;' %>
+          <% end %>
+          <div class="card-body text-center">
+            <h5 class="card-title"><%= user.email %></h5>
+            <div class="d-flex justify-content-center mt-3">
+              <%= button_to 'Unblock', unblock_user_path(user), method: :delete, class: 'btn btn-outline-success me-2' %>
+              <%= link_to 'View Profile', user_profile_path(user), class: 'btn btn-outline-primary' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="text-center">
+    <%= will_paginate @blocked_users, renderer: BootstrapPagination::Rails, param_name: 'page' %>
+  </div>
+</div>

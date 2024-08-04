@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     end
     collection do
       get :popular
+      get :blocked
     end
   end
 

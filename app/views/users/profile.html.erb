@@ -18,6 +18,13 @@
             <span class="badge bg-secondary">
               <%= link_to "Following: #{@user.following.count}", following_user_path(@user), class: 'text-white text-decoration-none' %>
             </span>
+            <% if current_user.id == @user.id %>
+              <span class="badge bg-danger">
+                <%= link_to blocked_users_path, class: "dropdown-item" do %>
+                  Blocked Users (<%= current_user.blocked_users.count %>)
+                <% end %>
+              </span>
+            <% end %>
           </p>
 
           <% if current_user.id != @user.id %>
@@ -43,7 +50,9 @@
               <%= link_to '🖊 Edit', edit_user_registration_path, class: 'btn btn-outline-primary btn-sm' %>
             <% end %>
             <% unless current_user.blocking?(@user) || @user.blocking?(current_user) %>
-              <button class="btn btn-outline-secondary btn-sm download-pdf-button" data-post-id="<%= @user.id %>" data-url="/users/<%= @user.id %>/download_posts">💾 Download Posts</button>
+              <button class="btn btn-outline-secondary btn-sm download-pdf-button" data-post-id="<%= @user.id %>" data-url="/users/<%= @user.id %>/download_posts">💾
+                Download Posts
+              </button>
               <%= link_to '❌ Delete Avatar', delete_avatar_path(@user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
             <% end %>
           </div>
@@ -74,7 +83,8 @@
             <% @comments.each do |comment| %>
               <div class="media mb-4 border-bottom pb-3">
                 <div class="media-body">
-                  <h5 class="mt-0"><%= comment.user.email %> on <%= link_to comment.post.title, post_path(comment.post) %></h5>
+                  <h5 class="mt-0"><%= comment.user.email %>
+                    on <%= link_to comment.post.title, post_path(comment.post) %></h5>
                   <p><%= comment.content %></p>
                   <%= link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
                 </div>

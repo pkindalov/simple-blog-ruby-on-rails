@@ -4,6 +4,10 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :profile, :settings, :update, :delete_avatar, :followers, :following]
   before_action :check_blocked, except: [:list, :popular, :profile] # Позволете достъп до profile, дори когато сте блокирани
 
+  def blocked
+    @blocked_users = current_user.blocked_users.paginate(page: params[:page], per_page: 10)
+  end
+
   def show
     # set_user вече задава @user
   end

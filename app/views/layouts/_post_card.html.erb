@@ -2,7 +2,7 @@
   <div class="card h-100">
     <% if post.photos.attached? %>
       <% if post.photos.count > 1 %>
-        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div id="carouselExampleIndicators-<%= post.id %>" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <% post.photos.each_with_index do |photo, index| %>
               <div class="carousel-item <%= 'active' if index == 0 %>">
@@ -10,11 +10,11 @@
               </div>
             <% end %>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators-<%= post.id %>" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
           </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators-<%= post.id %>" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
           </button>
@@ -22,8 +22,6 @@
       <% else %>
         <%= image_tag url_for(post.photos.first), class: 'card-img-top', alt: 'Post Image' %>
       <% end %>
-
-
     <% else %>
       <%= image_tag 'default_image.png', class: 'card-img-top', alt: 'Default Image' %>
     <% end %>
@@ -65,7 +63,6 @@
         <a href="#" class="btn disabled">👇 <%= post.downloaded_as_pdf || 0 %></a>
       </small></p>
       <hr />
-
       <div class="btn-group" role="group" aria-label="Post Actions">
         <%= link_to '👀 Show', post_path(post), class: 'btn btn-info' %>
         <% if post.user == current_user %>

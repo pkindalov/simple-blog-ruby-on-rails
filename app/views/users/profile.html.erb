@@ -85,7 +85,7 @@
                 <div class="media-body">
                   <h5 class="mt-0"><%= comment.user.email %>
                     on <%= link_to comment.post.title, post_path(comment.post) %></h5>
-                  <p><%= comment.content %></p>
+                  <p><%= raw comment.content %></p>
                   <%= link_to 'Delete', post_comment_path(comment.post, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger btn-sm' %>
                 </div>
               </div>

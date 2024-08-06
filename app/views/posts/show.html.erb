@@ -8,7 +8,7 @@
         <div class="card-body">
 
           <p>👁 <%= @post.views_count %> views</p>
-          <p>📄 <%= @post.description %></p>
+          <p>📄 <%= raw @post.description %></p>
           <p>📅 Posted on <%= @post.post_date %></p>
           <p>👍 Likes : <%= @post.likes.count %></p>
           <p>🗣 Comments : <%= @total_comments_count %></p>

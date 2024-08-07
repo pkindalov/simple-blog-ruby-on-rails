@@ -5,16 +5,19 @@ class MessagesController < ApplicationController
   before_action :set_message, only: %i[edit update destroy]
 
   def index
-    @receiver = User.find(params[:receiver_id]) if params[:receiver_id]
+    @users = current_user.mutual_following
 
-    # Използваме ActiveRecord::Relation дори и при липса на receiver
-    @messages = @receiver ? Message.between(current_user, @receiver).order(created_at: :asc) : Message.none
+    # Създаване на хеш с броя на непрочетените съобщения за всеки изпращач
+    @unread_counts = Message.where(receiver: current_user, read: false)
+                            .group(:sender_id)
+                            .count
 
+    @receiver = User.find_by(id: params[:receiver_id])
+    @messages = @receiver ? Message.between(current_user, @receiver).order(created_at: :desc).paginate(page: params[:page], per_page: 10) : []
     @messages = @messages.where('content LIKE ?', "%#{params[:query]}%") if params[:query].present?
-    @messages.where(receiver: current_user).update_all(read: true)
+    @messages.where(receiver: current_user).update_all(read: true) if @receiver
 
     @message = current_user.sent_messages.build(receiver: @receiver)
-    @users = current_user.mutual_following
   end
 
   def create

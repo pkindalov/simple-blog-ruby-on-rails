@@ -10,10 +10,14 @@
       <h3>Your Conversations</h3>
       <ul class="list-group">
         <% @users.each do |user| %>
+          <% unread_count = @unread_counts[user.id] || 0 %>
           <li class="list-group-item <%= 'active text-white' if @receiver == user %>">
-            <%#= link_to user.email, messages_path(receiver_id: user.id), class: "text-decoration-none text-dark" %>
-            <%= link_to user.email, messages_path(receiver_id: user.id), class: "text-decoration-none #{ @receiver == user ? 'text-white' : 'text-dark' }" %>
-
+            <%= link_to messages_path(receiver_id: user.id), class: "text-decoration-none #{ @receiver == user ? 'text-white' : 'text-dark' }" do %>
+              <%= user.email %>
+              <% if unread_count > 0 %>
+                <span class="badge bg-danger ms-2"><%= unread_count %></span>
+              <% end %>
+            <% end %>
           </li>
         <% end %>
       </ul>
@@ -31,7 +35,7 @@
                       class: 'btn btn-danger mb-3' %>
 
         <!-- List of messages -->
-        <div class="messages-list">
+        <div class="messages-list" id="messages-list">
           <% @messages.reverse_each do |message| %>
             <div class="message <%= 'text-end' if message.sender == current_user %> mt-3 mb-5">
               <strong><%= message.sender.email %>:</strong>
@@ -60,8 +64,13 @@
           <% end %>
         </div>
 
+        <!-- Pagination links -->
+        <div class="pagination mt-3">
+          <%= will_paginate @messages, renderer: BootstrapPagination::Rails %>
+        </div>
+
         <!-- Form for sending a new message -->
-        <%= form_with model: [current_user, @message], url: messages_path, local: true do |f| %>
+        <%= form_with model: [current_user, @message], url: messages_path, local: true, id: "new_message_form" do |f| %>
           <div class="form-group mt-5 mb-2">
             <%= f.hidden_field :receiver_id, value: @receiver.id %>
             <%= f.text_area :content, class: 'form-control ckeditor', placeholder: 'Write your message here...' %>
@@ -70,6 +79,30 @@
             <%= f.submit 'Send', class: 'btn btn-primary' %>
           </div>
         <% end %>
+
+        <script>
+            // Function to scroll to the bottom of the messages list
+            function scrollToBottom() {
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+
+            // Scroll to bottom on page load
+            document.addEventListener("DOMContentLoaded", function() {
+                scrollToBottom();
+            });
+
+            // Scroll to bottom on new message send
+            document.getElementById("new_message_form").addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                const form = this;
+
+                // Delay to allow message to be added to DOM
+                setTimeout(function() {
+                    form.submit(); // Submit the form after scrolling
+                    scrollToBottom();
+                }, 100);
+            });
+        </script>
 
       <% else %>
         <p>Please select a conversation from the list.</p>

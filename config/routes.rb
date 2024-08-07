@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # get 'messages/index'
+  # get 'messages/create'
   root 'home#index'
   get 'about', to: 'home#about'
   get 'services', to: 'home#services'
@@ -46,6 +48,9 @@ Rails.application.routes.draw do
       delete :delete_all
     end
   end
+
+  resources :messages, only: %i[index create]
+
 
   delete 'posts/:id/photo/:photo_id', to: 'posts#delete_photo', as: 'delete_post_photo'
   delete 'users/:id/avatar', to: 'users#delete_avatar', as: 'delete_avatar'

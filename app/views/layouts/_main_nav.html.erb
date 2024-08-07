@@ -22,7 +22,7 @@
             <ul class="dropdown-menu" aria-labelledby="usersDropdown">
               <li><%= link_to 'Popular Users', popular_users_path, class: "dropdown-item" %></li>
               <li><%= link_to 'All Users', users_list_path, class: "dropdown-item" %></li>
-              <li><%= link_to 'Blocked Users', blocked_users_path, class: "dropdown-item" %></li> <!-- Новият линк -->
+              <li><%= link_to 'Blocked Users', blocked_users_path, class: "dropdown-item" %></li>
             </ul>
           </li>
         <% end %>
@@ -44,6 +44,7 @@
               <%= current_user.email %>
             <% end %>
           </li>
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span class="badge bg-<%= current_user.received_notifications.unread.where.not(actor_id: current_user.blocked_users.pluck(:id)).count > 0 ? 'primary' : 'secondary' %>">🔔 <%= current_user.received_notifications.unread.where.not(actor_id: current_user.blocked_users.pluck(:id)).count %></span>
@@ -73,6 +74,20 @@
               </li>
             </ul>
           </li>
+
+          <li class="nav-item">
+            <%= link_to messages_path, class: "nav-link position-relative" do %>
+              📬 Messages
+              <% unread_count = current_user.received_messages.unread.count %>
+              <% if unread_count > 0 %>
+                <span class="badge rounded-pill bg-danger">
+                  <%= unread_count %>
+                  <span class="visually-hidden">unread messages</span>
+                </span>
+              <% end %>
+            <% end %>
+          </li>
+
           <li class="nav-item">
             <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: "nav-link" %>
           </li>

@@ -24,6 +24,9 @@ class User < ApplicationRecord
   has_many :passive_blocks, class_name: 'Block', foreign_key: 'blocked_id', dependent: :destroy
   has_many :blockers, through: :passive_blocks, source: :blocker
 
+  has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id'
+  has_many :received_messages, class_name: 'Message', foreign_key: 'receiver_id'
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -85,5 +88,9 @@ class User < ApplicationRecord
 
     # Изчисляване на общата популярност
     (3 * likes_count) + (2 * comments_count) + views_and_downloads
+  end
+
+  def can_message?(other_user)
+    following.include?(other_user) && other_user.following.include?(self) && !blocking?(other_user) && !other_user.blocking?(self)
   end
 end

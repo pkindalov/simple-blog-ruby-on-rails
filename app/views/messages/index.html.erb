@@ -1,0 +1,50 @@
+<!-- app/views/messages/index.html.erb -->
+<div class="container mt-5">
+  <h1>Messages</h1>
+
+  <!-- List of users that current user can message -->
+  <div class="row">
+    <div class="col-md-4">
+      <h3>Your Conversations</h3>
+      <ul class="list-group">
+        <% @users.each do |user| %>
+          <li class="list-group-item <%= 'active' if @receiver == user %>">
+            <%= link_to user.email, messages_path(receiver_id: user.id), class: "text-decoration-none" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <!-- Message conversation and form -->
+    <div class="col-md-8">
+      <% if @receiver %>
+        <h3>Conversation with <%= @receiver.email %></h3>
+
+        <!-- List of messages -->
+        <div class="messages-list">
+          <% @messages.reverse_each do |message| %>
+            <div class="message <%= 'text-end' if message.sender == current_user %>">
+              <strong><%= message.sender.email %>:</strong>
+              <p><%= message.content %></p>
+              <small class="text-muted"><%= time_ago_in_words(message.created_at) %> ago</small>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Form for sending a new message -->
+        <%= form_with model: [current_user, @message], url: messages_path, local: true do |f| %>
+          <div class="form-group">
+            <%= f.hidden_field :receiver_id, value: @receiver.id %>
+            <%= f.text_area :content, class: 'form-control', placeholder: 'Write your message here...' %>
+          </div>
+          <div class="form-group mt-3">
+            <%= f.submit 'Send', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+
+      <% else %>
+        <p>Please select a conversation from the list.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

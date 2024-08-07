@@ -29,27 +29,32 @@
         <!-- List of messages -->
         <div class="messages-list">
           <% @messages.reverse_each do |message| %>
-            <div class="message <%= 'text-end' if message.sender == current_user %>">
+            <div class="message <%= 'text-end' if message.sender == current_user %> mt-3 mb-5">
               <strong><%= message.sender.email %>:</strong>
-              <p><%= message.content %></p>
+              <p><%= raw message.content %></p>
               <small class="text-muted"><%= time_ago_in_words(message.created_at) %> ago</small>
 
               <!-- Buttons for editing and deleting messages -->
               <% if message.sender == current_user %>
-                <div class="message-actions">
-                  <%= link_to 'Edit', edit_message_path(message), class: 'btn btn-sm btn-secondary' %>
-                  <%= link_to 'Delete', message_path(message), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
+                <div class="message-actions mt-3 mb-3">
+                  <!-- Edit message in place -->
+                  <%= form_with model: [current_user, message], url: message_path(message), method: :patch, local: true, class: 'd-inline' do |f| %>
+                    <%= f.text_area :content, class: 'form-control mb-1 ckeditor', value: message.content, rows: 1 %>
+                    <%= f.submit 'Update', class: 'btn btn-sm btn-secondary mt-3' %>
+                  <% end %>
+                  <%= link_to 'Delete', message_path(message), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger mt-3' %>
                 </div>
               <% end %>
             </div>
           <% end %>
         </div>
 
+
         <!-- Form for sending a new message -->
         <%= form_with model: [current_user, @message], url: messages_path, local: true do |f| %>
-          <div class="form-group">
+          <div class="form-group mt-5">
             <%= f.hidden_field :receiver_id, value: @receiver.id %>
-            <%= f.text_area :content, class: 'form-control', placeholder: 'Write your message here...' %>
+            <%= f.text_area :content, class: 'form-control ckeditor', placeholder: 'Write your message here...' %>
           </div>
           <div class="form-group mt-3">
             <%= f.submit 'Send', class: 'btn btn-primary' %>

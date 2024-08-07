@@ -27,6 +27,7 @@ class MessagesController < ApplicationController
   end
 
   def edit
+    @receiver = @message.receiver
   end
 
   def update

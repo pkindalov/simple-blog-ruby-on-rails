@@ -11,7 +11,15 @@ Rails.start()
 document.addEventListener('turbo:load', () => {
     document.querySelectorAll('.ckeditor').forEach(editor => {
         ClassicEditor
-            .create(editor)
+            .create(editor, {
+                // toolbar: [
+                //     'bold', 'italic', 'underline', 'strikeThrough', '|',
+                //     'alignment', 'numberedList', 'bulletedList', 'outdent', 'indent', '|',
+                //     'link', 'insertTable', '|',
+                //     'blockQuote', 'undo', 'redo', 'clearFormatting', 'htmlEmbed'
+                // ],
+                removePlugins: ['ImageUpload', 'MediaEmbed', 'EasyImage']
+            })
             .catch(error => {
                 console.error(error);
             });

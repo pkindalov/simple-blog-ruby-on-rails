@@ -5,7 +5,7 @@
   <h1>Messages</h1>
 
   <!-- List of users that current user can message -->
-  <div class="row">
+  <div class="row mt-5">
     <div class="col-md-4">
       <h3>Your Conversations</h3>
       <ul class="list-group">
@@ -29,10 +29,12 @@
         <h3>Conversation with <%= @receiver.email %></h3>
 
         <!-- Button to delete entire conversation -->
-        <%= button_to 'Delete Conversation', destroy_conversation_messages_path(receiver_id: @receiver.id),
-                      method: :delete,
-                      data: { confirm: 'Are you sure you want to delete this conversation?' },
-                      class: 'btn btn-danger mb-3' %>
+        <% if @messages.count > 0 %>
+          <%= button_to 'Delete Conversation', destroy_conversation_messages_path(receiver_id: @receiver.id),
+                        method: :delete,
+                        data: { confirm: 'Are you sure you want to delete this conversation?' },
+                        class: 'btn btn-danger mb-3' %>
+        <% end %>
 
         <!-- List of messages -->
         <div class="messages-list" id="messages-list">
@@ -80,32 +82,11 @@
           </div>
         <% end %>
 
-        <script>
-            // Function to scroll to the bottom of the messages list
-            function scrollToBottom() {
-                window.scrollTo(0, document.body.scrollHeight);
-            }
-
-            // Scroll to bottom on page load
-            document.addEventListener("DOMContentLoaded", function() {
-                scrollToBottom();
-            });
-
-            // Scroll to bottom on new message send
-            document.getElementById("new_message_form").addEventListener("submit", function(event) {
-                event.preventDefault(); // Prevent the default form submission
-                const form = this;
-
-                // Delay to allow message to be added to DOM
-                setTimeout(function() {
-                    form.submit(); // Submit the form after scrolling
-                    scrollToBottom();
-                }, 100);
-            });
-        </script>
+        <%= javascript_include_tag 'messages', "data-turbo-track": "reload", defer: true %>
 
       <% else %>
-        <p>Please select a conversation from the list.</p>
+        <p class="text-center">Please select a user for conversation from the list. If there no one then you must first
+          follow and to be followed by someone </p>
       <% end %>
     </div>
   </div>

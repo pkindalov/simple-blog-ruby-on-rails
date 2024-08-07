@@ -1,4 +1,6 @@
 <!-- app/views/messages/index.html.erb -->
+<%= javascript_include_tag 'showHideEditForm', "data-turbo-track": "reload", defer: true %>
+
 <div class="container mt-5">
   <h1>Messages</h1>
 
@@ -8,8 +10,10 @@
       <h3>Your Conversations</h3>
       <ul class="list-group">
         <% @users.each do |user| %>
-          <li class="list-group-item <%= 'active' if @receiver == user %>">
-            <%= link_to user.email, messages_path(receiver_id: user.id), class: "text-decoration-none" %>
+          <li class="list-group-item <%= 'active text-white' if @receiver == user %>">
+            <%#= link_to user.email, messages_path(receiver_id: user.id), class: "text-decoration-none text-dark" %>
+            <%= link_to user.email, messages_path(receiver_id: user.id), class: "text-decoration-none #{ @receiver == user ? 'text-white' : 'text-dark' }" %>
+
           </li>
         <% end %>
       </ul>
@@ -36,27 +40,33 @@
 
               <!-- Buttons for editing and deleting messages -->
               <% if message.sender == current_user %>
-                <div class="message-actions mt-3 mb-3">
-                  <!-- Edit message in place -->
-                  <%= form_with model: [current_user, message], url: message_path(message), method: :patch, local: true, class: 'd-inline' do |f| %>
-                    <%= f.text_area :content, class: 'form-control mb-1 ckeditor', value: message.content, rows: 1 %>
-                    <%= f.submit 'Update', class: 'btn btn-sm btn-secondary mt-3' %>
+                <div class="message-actions mt-2">
+                  <button class="btn btn-sm btn-secondary toggle-edit-form">Edit</button>
+                  <%= link_to 'Delete', message_path(message), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
+                </div>
+
+                <!-- Edit form, initially hidden -->
+                <div class="edit-form mt-2" style="display: none;">
+                  <%= form_with model: [current_user, message], url: message_path(message), method: :patch, local: true do |f| %>
+                    <div class="form-group">
+                      <%= f.text_area :content, class: 'form-control mb-1 ckeditor', value: message.content, rows: 1 %>
+                      <%= f.submit 'Update', class: 'btn btn-sm btn-success mt-1' %>
+                      <button type="button" class="btn btn-sm btn-secondary cancel-edit-form">Cancel</button>
+                    </div>
                   <% end %>
-                  <%= link_to 'Delete', message_path(message), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger mt-3' %>
                 </div>
               <% end %>
             </div>
           <% end %>
         </div>
 
-
         <!-- Form for sending a new message -->
         <%= form_with model: [current_user, @message], url: messages_path, local: true do |f| %>
-          <div class="form-group mt-5">
+          <div class="form-group mt-5 mb-2">
             <%= f.hidden_field :receiver_id, value: @receiver.id %>
             <%= f.text_area :content, class: 'form-control ckeditor', placeholder: 'Write your message here...' %>
           </div>
-          <div class="form-group mt-3">
+          <div class="form-group mt-3 mb-5">
             <%= f.submit 'Send', class: 'btn btn-primary' %>
           </div>
         <% end %>

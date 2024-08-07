@@ -20,6 +20,12 @@
       <% if @receiver %>
         <h3>Conversation with <%= @receiver.email %></h3>
 
+        <!-- Button to delete entire conversation -->
+        <%= button_to 'Delete Conversation', destroy_conversation_messages_path(receiver_id: @receiver.id),
+                      method: :delete,
+                      data: { confirm: 'Are you sure you want to delete this conversation?' },
+                      class: 'btn btn-danger mb-3' %>
+
         <!-- List of messages -->
         <div class="messages-list">
           <% @messages.reverse_each do |message| %>
@@ -27,6 +33,14 @@
               <strong><%= message.sender.email %>:</strong>
               <p><%= message.content %></p>
               <small class="text-muted"><%= time_ago_in_words(message.created_at) %> ago</small>
+
+              <!-- Buttons for editing and deleting messages -->
+              <% if message.sender == current_user %>
+                <div class="message-actions">
+                  <%= link_to 'Edit', edit_message_path(message), class: 'btn btn-sm btn-secondary' %>
+                  <%= link_to 'Delete', message_path(message), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
+                </div>
+              <% end %>
             </div>
           <% end %>
         </div>

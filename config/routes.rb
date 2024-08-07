@@ -49,8 +49,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :messages, only: %i[index create]
-
+  # config/routes.rb
+  resources :messages, only: %i[index create edit update destroy] do
+    collection do
+      delete :destroy_conversation
+    end
+  end
 
   delete 'posts/:id/photo/:photo_id', to: 'posts#delete_photo', as: 'delete_post_photo'
   delete 'users/:id/avatar', to: 'users#delete_avatar', as: 'delete_avatar'

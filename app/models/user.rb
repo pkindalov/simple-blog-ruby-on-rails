@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class User < ApplicationRecord
   has_one_attached :avatar
   has_many :posts, dependent: :destroy
@@ -92,5 +93,10 @@ class User < ApplicationRecord
 
   def can_message?(other_user)
     following.include?(other_user) && other_user.following.include?(self) && !blocking?(other_user) && !other_user.blocking?(self)
+  end
+
+  # Метод за извличане на взаимно следваните потребители
+  def mutual_following
+    following & followers
   end
 end

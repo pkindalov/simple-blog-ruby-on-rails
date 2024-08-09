@@ -1,5 +1,14 @@
 <!-- app/views/messages/index.html.erb -->
 <%= javascript_include_tag 'showHideEditForm', "data-turbo-track": "reload", defer: true %>
+<style>
+    .reaction-buttons,
+    .current-reactions {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+</style>
 
 <div class="container mt-5">
   <h1>Messages</h1>
@@ -39,10 +48,13 @@
         <!-- List of messages -->
         <div class="messages-list" id="messages-list">
           <% @messages.reverse_each do |message| %>
-            <div class="message <%= 'text-end' if message.sender == current_user %> mt-3 mb-5">
+            <div class="message <%= 'text-end' if message.sender == current_user %> mt-3 mb-5" id="message-<%= message.id %>">
               <strong><%= message.sender.email %>:</strong>
               <p><%= raw message.content %></p>
               <small class="text-muted"><%= time_ago_in_words(message.created_at) %> ago</small>
+
+              <!-- Reaction buttons -->
+              <%= render 'layouts/reaction_buttons', message: message %>
 
               <!-- Buttons for editing and deleting messages -->
               <% if message.sender == current_user %>

@@ -1,0 +1,12 @@
+<% reactions = { like: "👍", love: "❤️", laugh: "😂", wow: "😮", sad: "😢", angry: "😡" } %>
+
+<!-- Display current reactions -->
+<%= render partial: 'layouts/current_reactions', locals: { message: message, reactions: reactions } %>
+
+<% if message.sender != current_user %>
+  <div class="reaction-buttons d-flex flex-row align-items-center mb-2">
+    <% reactions.each do |reaction, emoji| %>
+      <%= button_to emoji, message_reactions_path(message, reaction_type: reaction), method: :post, remote: true, class: 'btn btn-light reaction-button me-2', data: { reaction_type: reaction } %>
+    <% end %>
+  </div>
+<% end %>

@@ -1,9 +1,6 @@
-# frozen_string_literal: true
-
 Rails.application.routes.draw do
-  # get 'messages/index'
-  # get 'messages/create'
   root 'home#index'
+
   get 'about', to: 'home#about'
   get 'services', to: 'home#services'
   get 'contacts', to: 'home#contacts'
@@ -12,6 +9,7 @@ Rails.application.routes.draw do
   get 'users/list', to: 'users#list', as: 'users_list'
 
   devise_for :users
+
   resources :users, only: [:show] do
     member do
       post 'follow', to: 'follows#create'
@@ -49,12 +47,13 @@ Rails.application.routes.draw do
     end
   end
 
-  # config/routes.rb
   resources :messages, only: %i[index create edit update destroy] do
+    resources :reactions, only: %i[create destroy]
     collection do
       delete :destroy_conversation
     end
   end
+
 
   delete 'posts/:id/photo/:photo_id', to: 'posts#delete_photo', as: 'delete_post_photo'
   delete 'users/:id/avatar', to: 'users#delete_avatar', as: 'delete_avatar'

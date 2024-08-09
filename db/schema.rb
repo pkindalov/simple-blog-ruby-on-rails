@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_07_072700) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_07_195514) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -116,6 +116,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_07_072700) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "reactions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "reactionable_type", null: false
+    t.integer "reactionable_id", null: false
+    t.string "reaction_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reactionable_type", "reactionable_id"], name: "index_reactions_on_reactionable"
+    t.index ["user_id"], name: "index_reactions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -136,4 +147,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_07_072700) do
   add_foreign_key "messages", "users", column: "receiver_id"
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "posts", "users", primary_key: "id"
+  add_foreign_key "reactions", "users"
 end

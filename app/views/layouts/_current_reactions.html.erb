@@ -1,5 +1,5 @@
-<div class="current-reactions mt-2 d-flex flex-row align-items-center">
+<div class="current-reactions <%= message.sender == current_user ? 'justify-content-end' : 'justify-content-start' %>">
   <% message.reactions.group(:reaction_type).count.each do |reaction_type, count| %>
-    <span class="me-3"><%= reactions[reaction_type.to_sym] %> <%= count %></span>
+    <span class="me-3 mt-3 mb-5"><%= reactions[reaction_type.to_sym] %> <%= count %></span>
   <% end %>
 </div>
